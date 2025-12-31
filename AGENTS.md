@@ -2,11 +2,11 @@
 
 ## Project Structure & Module Organization
 - `index.html` is the deployed HTML shell that links styles and scripts.
-- `styles.css` contains app styling.
-- `app.js` contains app logic (Leaflet map, winds fetch, jump run, ADS-B polling).
-- `spot.html` is a standalone spot calculator used for testing and is not deployed.
-- `adsb_proxy.py` is a local Flask proxy for ADS-B data (used for dev/testing).
-- `nginx.conf` is a sample server config that serves the app and proxies `/adsb`.
+- `assets/styles.css` contains app styling.
+- `assets/app.js` contains app logic (Leaflet map, winds fetch, jump run, ADS-B polling).
+- `dev/spot.html` is a standalone spot calculator used for testing and is not deployed.
+- `dev/adsb_proxy.py` is a local Flask proxy for ADS-B data (used for dev/testing).
+- `dev/nginx.conf` is a sample server config that serves the app and proxies `/adsb`.
 - `notes.txt` is currently unused.
 
 ## Feature Overview
@@ -20,7 +20,7 @@
 ## Build, Test, and Development Commands
 - Open the app locally by serving or opening `index.html` in a browser (e.g., `open index.html`).
 - Start the ADS-B proxy (optional, for local ADS-B data):
-  - `python3 adsb_proxy.py`
+  - `python3 dev/adsb_proxy.py`
   - Requires `flask` and `requests` (install with `python3 -m pip install flask requests`).
 
 ## Coding Style & Naming Conventions

@@ -8,11 +8,11 @@ A single-page web app for skydive dropzones that visualizes winds aloft, compute
 - Polls a local ADS-B proxy to show jump aircraft and nearby traffic.
 
 ## Project Files
-- `index.html`: Deployed app (HTML markup; links to `styles.css` and `app.js`).
-- `styles.css`: App styling.
-- `app.js`: App logic (winds fetch, jump run, ADS-B polling).
-- `spot.html`: Experimental spot calculator (not deployed).
-- `adsb_proxy.py`: Local ADS-B proxy for development/testing.
+- `index.html`: Deployed app (HTML markup; links to assets in `assets/`).
+- `assets/styles.css`: App styling.
+- `assets/app.js`: App logic (winds fetch, jump run, ADS-B polling).
+- `dev/spot.html`: Experimental spot calculator (not deployed).
+- `dev/adsb_proxy.py`: Local ADS-B proxy for development/testing.
 - `AGENTS.md`: Contributor guide.
 
 ## Quick Start
@@ -21,7 +21,7 @@ Open `index.html` in a browser.
 Optional: run the ADS-B proxy locally (requires `flask` and `requests`):
 
 ```bash
-python3 adsb_proxy.py
+python3 dev/adsb_proxy.py
 ```
 
 ## Configuration
