@@ -9,6 +9,14 @@
 - `nginx.conf` is a sample server config that serves the app and proxies `/adsb`.
 - `notes.txt` is currently unused.
 
+## Feature Overview
+- Non-interactive display board for Skydive Midwest (DZ at 42.703153, -87.958641).
+- Leaflet satellite map (Esri World Imagery), zoom 15, with DZ marker.
+- Winds aloft from Open-Meteo GFS mapped to 0–14k ft (1k increments).
+- Auto jump run heading from average winds 5k–14k and offset computed from layered drift + Twin Otter fudge factors.
+- ADS-B: show nearby traffic as dots with tooltips; highlight jump ships with track line and sidebar status.
+- Adsb.lol endpoint proxied via nginx `/adsb` to avoid CORS.
+
 ## Build, Test, and Development Commands
 - Open the app locally by serving or opening `index.html` in a browser (e.g., `open index.html`).
 - Start the ADS-B proxy (optional, for local ADS-B data):
@@ -27,6 +35,7 @@
   - Winds table populates from Open-Meteo.
   - Jump run line updates after winds load.
   - ADS-B markers appear when proxy is running.
+  - Highlighted jump plane updates when one of the configured hexes is nearby.
 
 ## Commit & Pull Request Guidelines
 - Use clear, imperative commit messages (e.g., "Update wind fetch timing").
