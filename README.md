@@ -24,8 +24,14 @@ Optional: run the ADS-B proxy locally (requires `flask` and `requests`):
 python3 dev/adsb_proxy.py
 ```
 
+## Deployment Notes
+- This app runs on a Raspberry Pi configured to open the app on boot.
+- You can host locally on the Pi or serve it from a web server.
+- Current public host: `https://spot.austin-ge.com`.
+ - You must configure the DZ location and aircraft list for your own dropzone; defaults are set for Skydive Midwest and their aircraft.
+
 ## Configuration
-Edit values in `index.html`:
+Edit values in `assets/app.js`:
 - `DZ_NAME`, `DZ_LAT`, `DZ_LON`
 - `JUMP_PLANE_HEXES`
 - `ADSB_ENDPOINT` (defaults to `http://localhost:5000/adsb`)
