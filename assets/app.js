@@ -45,10 +45,17 @@ const HEX_TO_TAIL = {
   "a948ba": "N698DA"
 };
 
+// NEW (2025-12-31): Configurable skydiver/canopy parameters
+const EXIT_ALTITUDE_FT = 13000;
+const OPENING_ALTITUDE_FT = 3000;
+const FREEFALL_TERMINAL_VELOCITY_MPH = 120;
+const CANOPY_DESCENT_RATE_MPH = 15;
+const CANOPY_FORWARD_SPEED_MPH = 25;
+
 // Jump run geometry + fudge factors (Twin Otter)
 const JUMP_RUN_LENGTH_MILES = 0.8;      // total ground length of jump run
-const AIRPLANE_DRIFT_MILES   = 0.12;    // from old PHP
-const LIGHT_TO_DOOR_MILES    = 0.10;    // from old PHP
+const AIRPLANE_DRIFT_MILES   = 0.12;
+const LIGHT_TO_DOOR_MILES    = 0.10;
 const METERS_PER_MILE        = 1609.34;
 
 // Dynamic upwind/downwind offset (miles) for first exit (green light)
@@ -137,58 +144,104 @@ function renderWindsTable() {
 }
 
 /* ================================
-   Dynamic offset calculation
+   Dynamic offset calculation (New as of 2025-12-31)
 =================================== */
 function computeOffsetMiles(jumpRunHeadingDeg) {
-  if (!windsAloft.length) return jumpRunOffsetMiles || 0;
+    if (!windsAloft.length) return jumpRunOffsetMiles || 0;
 
-  const layers = [
-    { alt: 12000, t: 15 },
-    { alt:  9000, t: 15 },
-    { alt:  6000, t: 15 },
-    { alt:  3000, t: 110 },
-    { alt:     0, t: 90 }
-  ];
+    const knotsToMph = 1.15078;
+    const ftPerMile = 5280;
 
-  let dx = 0; // miles east
-  let dy = 0; // miles north
+    // Helper to calculate drift vector (in miles) for a given phase
+    const calculateDriftVector = (startAltFt, endAltFt, descentRateMph) => {
+        let dx = 0; // miles east
+        let dy = 0; // miles north
 
-  for (const layer of layers) {
-    const w = getWindAtAlt(layer.alt);
-    if (!w) continue;
+        const relevantWinds = windsAloft
+            .filter(w => w.altFt >= endAltFt && w.altFt <= startAltFt)
+            .sort((a, b) => b - a); // Process from high to low
 
-    const dirFrom = w.dirDeg;             // wind FROM direction (meteo)
-    const dirTo = (dirFrom + 180) % 360;  // where the air is going TO
-    const speedKt = w.speedKt || 0;
+        if (relevantWinds.length === 0) {
+            // If no wind data in range, use the closest single point
+            const avgAlt = (startAltFt + endAltFt) / 2;
+            const wind = getWindAtAlt(avgAlt);
+            if (!wind) return { dx: 0, dy: 0 };
 
-    const distanceMiles = speedKt * 1.15 * (layer.t / 3600);
+            const layerThicknessFt = startAltFt - endAltFt;
+            if (layerThicknessFt <= 0) return { dx: 0, dy: 0 };
+            
+            const timeInLayerHours = (layerThicknessFt / ftPerMile) / descentRateMph;
+            const windDirTo = (wind.dirDeg + 180) % 360;
+            const windSpeedMph = wind.speedKt * knotsToMph;
+            const driftDistanceMiles = windSpeedMph * timeInLayerHours;
+            
+            const theta = windDirTo * Math.PI / 180;
+            dx = Math.sin(theta) * driftDistanceMiles;
+            dy = Math.cos(theta) * driftDistanceMiles;
+            return { dx, dy };
+        }
+        
+        // Ensure start and end altitudes are part of the calculation
+        const altitudes = [startAltFt, ...relevantWinds.map(w => w.altFt), endAltFt];
+        const uniqueAlts = [...new Set(altitudes)].sort((a, b) => b - a);
 
-    const theta = dirTo * Math.PI / 180;
-    const localDx = Math.sin(theta) * distanceMiles; // east
-    const localDy = Math.cos(theta) * distanceMiles; // north
+        for (let i = 0; i < uniqueAlts.length - 1; i++) {
+            const upperAltFt = uniqueAlts[i];
+            const lowerAltFt = uniqueAlts[i+1];
+            
+            if (upperAltFt <= lowerAltFt) continue;
 
-    dx += localDx;
-    dy += localDy;
-  }
+            const avgAlt = (upperAltFt + lowerAltFt) / 2;
+            const wind = getWindAtAlt(avgAlt);
+            if (!wind) continue;
 
-  const H = jumpRunHeadingDeg * Math.PI / 180;
-  const ux = Math.sin(H);
-  const uy = Math.cos(H);
+            const layerThicknessFt = upperAltFt - lowerAltFt;
+            const timeInLayerHours = (layerThicknessFt / ftPerMile) / descentRateMph;
 
-  const alongHeading = dx * ux + dy * uy; // miles
-  const centerOffsetMiles = -alongHeading;
+            const windDirTo = (wind.dirDeg + 180) % 360;
+            const windSpeedMph = wind.speedKt * knotsToMph;
+            const driftDistanceMiles = windSpeedMph * timeInLayerHours;
+            
+            const theta = windDirTo * Math.PI / 180;
+            dx += Math.sin(theta) * driftDistanceMiles;
+            dy += Math.cos(theta) * driftDistanceMiles;
+        }
 
-  const fudge = AIRPLANE_DRIFT_MILES + LIGHT_TO_DOOR_MILES;
+        return { dx, dy };
+    };
 
-  let offset = centerOffsetMiles - (JUMP_RUN_LENGTH_MILES / 2) - fudge;
+    // 1. Calculate canopy flight characteristics
+    const timeUnderCanopyHours = (OPENING_ALTITUDE_FT - 0) / ftPerMile / CANOPY_DESCENT_RATE_MPH;
+    const canopyPassiveDrift = calculateDriftVector(OPENING_ALTITUDE_FT, 0, CANOPY_DESCENT_RATE_MPH);
 
-  if (!Number.isFinite(offset)) offset = 0;
+    // 2. Determine the required opening point relative to the DZ
+    const H_rad = jumpRunHeadingDeg * Math.PI / 180;
+    const headingUx = Math.sin(H_rad);
+    const headingUy = Math.cos(H_rad);
+    const canopyDriftAlongHeading = canopyPassiveDrift.dx * headingUx + canopyPassiveDrift.dy * headingUy;
+    
+    const flyableDistMiles = CANOPY_FORWARD_SPEED_MPH * timeUnderCanopyHours;
 
-  const maxOffset = 2 * JUMP_RUN_LENGTH_MILES;
-  if (offset > maxOffset) offset = maxOffset;
-  if (offset < -maxOffset) offset = -maxOffset;
+    const openingPointOffsetMiles = -(flyableDistMiles + canopyDriftAlongHeading);
+    
+    // 3. Calculate freefall drift
+    const freefallDrift = calculateDriftVector(EXIT_ALTITUDE_FT, OPENING_ALTITUDE_FT, FREEFALL_TERMINAL_VELOCITY_MPH);
+    const freefallDriftAlongHeading = freefallDrift.dx * headingUx + freefallDrift.dy * headingUy;
 
-  return offset;
+    // 4. The Exit Point is the Opening Point, adjusted for freefall drift.
+    const exitPointOffsetMiles = openingPointOffsetMiles - freefallDriftAlongHeading;
+
+    // 5. Final offset for the green light (start of jump run)
+    const fudge = AIRPLANE_DRIFT_MILES + LIGHT_TO_DOOR_MILES;
+    let offset = exitPointOffsetMiles - (JUMP_RUN_LENGTH_MILES / 2) - fudge;
+
+    if (!Number.isFinite(offset)) offset = 0;
+
+    const maxOffset = 4.0; // Increased max offset for potentially larger spots
+    if (offset > maxOffset) offset = maxOffset;
+    if (offset < -maxOffset) offset = -maxOffset;
+
+    return offset;
 }
 
 /* Helper: a point at signed distance sMiles along the jump run axis */
