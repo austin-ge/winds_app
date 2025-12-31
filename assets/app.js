@@ -1,62 +1,10 @@
 /* ================================
-   CONFIG
+   RUNTIME STATE
+   (Configuration moved to config.js)
 =================================== */
-const DZ_NAME = "Skydive Midwest";
-const DZ_LAT = 42.703153;
-const DZ_LON = -87.958641;
 
-// Open-Meteo model (GFS)
-const WIND_MODEL_URL = "https://api.open-meteo.com/v1/gfs";
-
-// Desired altitudes we store winds at
-const desiredAltitudesFt = [
-  0,1000,2000,3000,4000,5000,6000,
-  7000,8000,9000,10000,11000,12000,13000,14000
-];
-
+// Winds data fetched from API
 let windsAloft = [];
-
-// GFS pressure levels we will use
-const pressureLevels = [1000, 925, 850, 700, 600];
-const approxAltitudeFtByLevel = {
-  1000: 361,
-  925: 2625,
-  850: 4921,
-  700: 9843,
-  600: 13780
-};
-
-// ADS-B endpoint via local proxy on THIS computer
-const ADSB_ENDPOINT = "http://localhost:5000/adsb";
-
-// Hex codes (ICAO 24-bit) for your jump planes (lowercase)
-const JUMP_PLANE_HEXES = [
-  "a93270", // N692DA
-  "a939de", // N694DA
-  "a93627", // N693DA
-  "a948ba"  // N698DA
-];
-
-// Map hex -> tail number for sidebar display
-const HEX_TO_TAIL = {
-  "a93270": "N692DA",
-  "a939de": "N694DA",
-  "a93627": "N693DA",
-  "a948ba": "N698DA"
-};
-
-// NEW (2025-12-31): Configurable skydiver/canopy parameters
-const EXIT_ALTITUDE_FT = 13000;
-const OPENING_ALTITUDE_FT = 3000;
-const FREEFALL_TERMINAL_VELOCITY_MPH = 120;
-const CANOPY_DESCENT_RATE_MPH = 15;
-const CANOPY_FORWARD_SPEED_MPH = 25;
-
-// Jump run geometry + fudge factors (Twin Otter)
-const JUMP_RUN_LENGTH_MILES = 0.8;      // total ground length of jump run
-const AIRPLANE_DRIFT_MILES   = 0.12;
-const LIGHT_TO_DOOR_MILES    = 0.10;
-const METERS_PER_MILE        = 1609.34;
 
 // Dynamic upwind/downwind offset (miles) for first exit (green light)
 let jumpRunOffsetMiles = 0;
