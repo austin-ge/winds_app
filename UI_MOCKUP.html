@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UI Mockup - Winds App Comparison</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 1200px) {
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .version {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .version h2 {
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e0e0e0;
+      font-size: 1.2rem;
+    }
+
+    .version.current h2 {
+      color: #666;
+    }
+
+    .version.proposed h2 {
+      color: #1976d2;
+    }
+
+    /* CURRENT STYLES */
+    .current .sidebar {
+      width: 320px;
+      padding: 12px;
+      border-right: 1px solid #ddd;
+      background: #fafafa;
+      font-family: system-ui, sans-serif;
+    }
+
+    .current h3 {
+      font-size: 1.1rem;
+      margin: 0 0 8px;
+    }
+
+    .current h4 {
+      font-size: 0.95rem;
+      margin: 12px 0 4px;
+    }
+
+    .current .small {
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    .current table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 0.8rem;
+    }
+
+    .current th, .current td {
+      border-bottom: 1px solid #ddd;
+      padding: 4px;
+      text-align: right;
+    }
+
+    .current th {
+      background: #eee;
+    }
+
+    .current .dz-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #c00;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .current .jump-run-main {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* PROPOSED STYLES */
+    .proposed .sidebar {
+      width: 340px;
+      padding: 0;
+      background: linear-gradient(to bottom, #e3f2fd 0%, #ffffff 100%);
+      font-family: 'Inter', system-ui, sans-serif;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .proposed .header {
+      background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+      color: white;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .proposed .header h3 {
+      margin: 0 0 4px 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .proposed .header .tagline {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .proposed .content {
+      padding: 16px;
+    }
+
+    .proposed .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-left: 3px solid #2196f3;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .proposed .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .proposed .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .proposed .card-icon {
+      font-size: 1.2rem;
+    }
+
+    .proposed .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .proposed .small {
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .proposed .dz-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .proposed .dz-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f44336;
+      box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(244, 67, 54, 0.1); }
+    }
+
+    .proposed .jump-run-display {
+      background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .proposed .jump-run-heading {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .proposed .jump-run-label {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      margin-top: 4px;
+      font-weight: 300;
+    }
+
+    .proposed table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.8rem;
+    }
+
+    .proposed thead {
+      background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+    }
+
+    .proposed th {
+      padding: 6px 8px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #555;
+      border-bottom: 2px solid #bdbdbd;
+    }
+
+    .proposed td {
+      padding: 6px 8px;
+      text-align: right;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .proposed tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .proposed tbody tr:hover {
+      background: #e3f2fd;
+    }
+
+    .proposed .wind-dir {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .proposed .wind-arrow {
+      font-size: 0.9rem;
+    }
+
+    /* Wind speed color coding */
+    .proposed .wind-speed-low { color: #4caf50; font-weight: 600; }
+    .proposed .wind-speed-med { color: #ff9800; font-weight: 600; }
+    .proposed .wind-speed-high { color: #f44336; font-weight: 600; }
+
+    .proposed .altitude-highlight {
+      background: #fff3e0 !important;
+      font-weight: 600;
+    }
+
+    .proposed .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .proposed .status-good {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .proposed .status-warning {
+      background: #fff3e0;
+      color: #f57c00;
+    }
+
+    .proposed .timestamp {
+      font-size: 0.7rem;
+      color: #999;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .features {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .features h3 {
+      margin-top: 0;
+      color: #1976d2;
+    }
+
+    .features ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .features li {
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      border-left: 3px solid #2196f3;
+    }
+
+    .features li strong {
+      color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Winds App - UI Redesign Mockup</h1>
+    <p class="subtitle">Compare the current design with the proposed improvements</p>
+
+    <div class="comparison">
+      <!-- CURRENT VERSION -->
+      <div class="version current">
+        <h2>Current Design</h2>
+        <div class="sidebar">
+          <h3>Winds & Jump Run</h3>
+          <div class="small">
+            Live upper-air winds from GFS via Open-Meteo.<br>
+            Heading & spot auto-updated from winds.
+          </div>
+
+          <h4>Dropzone</h4>
+          <div class="small">
+            <span class="dz-dot"></span>
+            <span>Skydive Midwest</span><br>
+            Lat: 42.70315, Lon: -87.95864
+          </div>
+
+          <h4>Jump Run</h4>
+          <div class="jump-run-main">Jump Run 270@+0.85</div>
+          <div class="small">Updated 14:23:45</div>
+
+          <h4>Winds Aloft</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Alt (ft)</th>
+                <th>Dir (°)</th>
+                <th>Spd (kt)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>280</td><td>8</td></tr>
+              <tr><td>3000</td><td>270</td><td>12</td></tr>
+              <tr><td>6000</td><td>265</td><td>18</td></tr>
+              <tr><td>9000</td><td>260</td><td>25</td></tr>
+              <tr><td>13000</td><td>255</td><td>32</td></tr>
+            </tbody>
+          </table>
+          <div class="small">Updated 2 min ago</div>
+
+          <h4>Jump Aircraft</h4>
+          <div class="small">
+            Tracks N692DA / N693DA / N694DA / N698DA near the DZ.
+          </div>
+          <div class="small">
+            Tracking: N692DA at 12500 ft, GS 85 kt
+          </div>
+        </div>
+      </div>
+
+      <!-- PROPOSED VERSION -->
+      <div class="version proposed">
+        <h2>Proposed Design ✨</h2>
+        <div class="sidebar">
+          <div class="header">
+            <h3>💨 Winds & Jump Run</h3>
+            <div class="tagline">Live GFS upper-air data • Auto-calculated heading</div>
+          </div>
+
+          <div class="content">
+            <!-- Dropzone Card -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📍</span>
+                <h4 class="card-title">Dropzone</h4>
+              </div>
+              <div class="dz-info">
+                <span class="dz-dot"></span>
+                <div>
+                  <strong>Skydive Midwest</strong><br>
+                  <span class="small">42.70315, -87.95864</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jump Run Card -->
+            <div class="card" style="border-left-color: #4caf50;">
+              <div class="card-header">
+                <span class="card-icon">✈️</span>
+                <h4 class="card-title">Jump Run</h4>
+              </div>
+              <div class="jump-run-display">
+                <div class="jump-run-heading">270° @ +0.85</div>
+                <div class="jump-run-label">HEADING • OFFSET (MI)</div>
+              </div>
+              <div class="timestamp">Updated 14:23:45</div>
+            </div>
+
+            <!-- Winds Aloft Card -->
+            <div class="card" style="border-left-color: #ff9800;">
+              <div class="card-header">
+                <span class="card-icon">🌬️</span>
+                <h4 class="card-title">Winds Aloft</h4>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Alt (ft)</th>
+                    <th>Dir (°)</th>
+                    <th>Spd (kt)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>0</td><td><span class="wind-dir"><span class="wind-arrow">↖</span>280</span></td><td class="wind-speed-low">8</td></tr>
+                  <tr class="altitude-highlight"><td>3000</td><td><span class="wind-dir"><span class="wind-arrow">←</span>270</span></td><td class="wind-speed-low">12</td></tr>
+                  <tr><td>6000</td><td><span class="wind-dir"><span class="wind-arrow">←</span>265</span></td><td class="wind-speed-med">18</td></tr>
+                  <tr><td>9000</td><td><span class="wind-dir"><span class="wind-arrow">←</span>260</span></td><td class="wind-speed-med">25</td></tr>
+                  <tr class="altitude-highlight"><td>13000</td><td><span class="wind-dir"><span class="wind-arrow">←</span>255</span></td><td class="wind-speed-high">32</td></tr>
+                </tbody>
+              </table>
+              <div class="small" style="margin-top: 8px;">
+                <span class="status-badge status-good">✓ Fresh data</span>
+                <div class="timestamp">Updated 2 min ago</div>
+              </div>
+            </div>
+
+            <!-- Aircraft Card -->
+            <div class="card" style="border-left-color: #9c27b0;">
+              <div class="card-header">
+                <span class="card-icon">🛩️</span>
+                <h4 class="card-title">Jump Aircraft</h4>
+              </div>
+              <div class="small">
+                Tracking N692DA / N693DA / N694DA / N698DA
+              </div>
+              <div style="margin-top: 8px; padding: 8px; background: #f3e5f5; border-radius: 4px;">
+                <strong style="color: #9c27b0;">N692DA</strong><br>
+                <span class="small">
+                  🔼 12,500 ft • ➡️ 85 kt GS
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features List -->
+    <div class="features">
+      <h3>✨ Proposed Improvements</h3>
+      <ul>
+        <li><strong>Modern Typography:</strong> Inter font family for improved readability</li>
+        <li><strong>Sky Theme:</strong> Aviation-inspired blue gradients and colors</li>
+        <li><strong>Card Layout:</strong> Organized sections with subtle shadows and hover effects</li>
+        <li><strong>Color-Coded Winds:</strong> Green (calm), Yellow (moderate), Red (strong)</li>
+        <li><strong>Wind Arrows:</strong> Visual direction indicators in the table</li>
+        <li><strong>Highlighted Altitudes:</strong> Opening (3k) and exit (13k) altitudes stand out</li>
+        <li><strong>Gradient Header:</strong> Professional blue gradient with white text</li>
+        <li><strong>Status Badges:</strong> Visual indicators for data freshness</li>
+        <li><strong>Pulsing DZ Marker:</strong> Animated location dot</li>
+        <li><strong>Hover Effects:</strong> Cards lift slightly on hover</li>
+        <li><strong>Better Spacing:</strong> More breathing room between elements</li>
+        <li><strong>Icons:</strong> Emoji icons for quick visual scanning</li>
+        <li><strong>Jump Run Highlight:</strong> Green gradient box makes it stand out</li>
+        <li><strong>Professional Polish:</strong> Smooth transitions and refined details</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
