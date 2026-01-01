@@ -5,6 +5,7 @@
 
 // Winds data fetched from API
 let windsAloft = [];
+let windsTimestamp = null; // When the winds were last fetched/loaded
 
 // Dynamic upwind/downwind offset (miles) for first exit (green light)
 let jumpRunOffsetMiles = 0;
@@ -14,6 +15,139 @@ let currentHeadingDeg = 270;
 
 // Track where the current heading came from: "manual" or "auto-winds"
 let jumpRunSource = "auto-winds";
+
+/* ================================
+   LOCAL STORAGE CACHING
+=================================== */
+const CACHE_KEY = "windsAloft_cache";
+const CACHE_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
+
+// Save winds to localStorage with timestamp
+function saveWindsToCache(winds) {
+  try {
+    const cacheData = {
+      winds: winds,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+    console.log("Winds saved to cache");
+  } catch (err) {
+    console.error("Failed to save winds to cache:", err);
+  }
+}
+
+// Load winds from localStorage if available and not too old
+function loadCachedWinds() {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (!cached) return null;
+
+    const cacheData = JSON.parse(cached);
+    const age = Date.now() - cacheData.timestamp;
+
+    if (age > CACHE_MAX_AGE_MS) {
+      console.log("Cached winds expired (age:", Math.round(age / 60000), "minutes)");
+      return null;
+    }
+
+    console.log("Loaded cached winds (age:", Math.round(age / 60000), "minutes)");
+    return {
+      winds: cacheData.winds,
+      timestamp: cacheData.timestamp,
+      age: age
+    };
+  } catch (err) {
+    console.error("Failed to load cached winds:", err);
+    return null;
+  }
+}
+
+// Get human-readable age string
+function getWindsAgeString(timestamp) {
+  if (!timestamp) return "";
+
+  const ageMs = Date.now() - timestamp;
+  const ageMinutes = Math.round(ageMs / 60000);
+
+  if (ageMinutes < 1) return " (just now)";
+  if (ageMinutes === 1) return " (1 min ago)";
+  if (ageMinutes < 60) return ` (${ageMinutes} min ago)`;
+
+  const ageHours = Math.round(ageMinutes / 60);
+  if (ageHours === 1) return " (1 hour ago)";
+  return ` (${ageHours} hours ago)`;
+}
+
+/* ================================
+   ERROR HANDLING & UI FEEDBACK
+=================================== */
+
+// Show error/status banner to user
+function showBanner(message, type = 'error', duration = 10000) {
+  const banner = document.getElementById('error-banner');
+  if (!banner) return;
+
+  // Remove existing type classes
+  banner.classList.remove('error', 'warning', 'info', 'success');
+
+  // Add new type class and show
+  banner.classList.add(type);
+  banner.textContent = message;
+  banner.classList.remove('hidden');
+
+  // Auto-hide after duration (unless duration is 0)
+  if (duration > 0) {
+    setTimeout(() => {
+      banner.classList.add('hidden');
+    }, duration);
+  }
+}
+
+// Hide the banner
+function hideBanner() {
+  const banner = document.getElementById('error-banner');
+  if (banner) {
+    banner.classList.add('hidden');
+  }
+}
+
+// Show/hide loading spinner
+function setLoadingState(elementId, isLoading) {
+  const spinner = document.getElementById(elementId);
+  if (!spinner) return;
+
+  if (isLoading) {
+    spinner.classList.remove('hidden');
+  } else {
+    spinner.classList.add('hidden');
+  }
+}
+
+/* ================================
+   RETRY LOGIC WITH EXPONENTIAL BACKOFF
+=================================== */
+
+// Retry a function with exponential backoff
+async function retryWithBackoff(fn, maxRetries = 3, baseDelay = 2000) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+
+      if (attempt < maxRetries) {
+        const delay = baseDelay * Math.pow(2, attempt);
+        console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms delay...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  // All retries failed
+  throw lastError;
+}
 
 /* ================================
    Utility functions
@@ -69,7 +203,7 @@ function getWindAtAlt(altFt) {
 }
 
 /* ================================
-   Render Winds Table
+   Render Winds Table & Update Timestamp
 =================================== */
 function renderWindsTable() {
   const tbody = document.getElementById("winds-table-body");
@@ -77,6 +211,7 @@ function renderWindsTable() {
 
   if (!windsAloft.length) {
     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Loading…</td></tr>`;
+    updateWindsTimestampDisplay();
     return;
   }
 
@@ -89,6 +224,29 @@ function renderWindsTable() {
     `;
     tbody.appendChild(tr);
   });
+
+  updateWindsTimestampDisplay();
+}
+
+function updateWindsTimestampDisplay() {
+  const updatedEl = document.getElementById("winds-updated");
+  if (!updatedEl) return;
+
+  if (!windsTimestamp) {
+    updatedEl.textContent = "--";
+    return;
+  }
+
+  const ageStr = getWindsAgeString(windsTimestamp);
+  const ageMs = Date.now() - windsTimestamp;
+  const ageMinutes = Math.round(ageMs / 60000);
+
+  // Show warning if data is stale (older than 90 minutes)
+  if (ageMinutes > 90) {
+    updatedEl.innerHTML = `<span style="color: #ff9800;">⚠ Winds data is ${ageMinutes} min old</span>`;
+  } else {
+    updatedEl.textContent = `Updated${ageStr}`;
+  }
 }
 
 /* ================================
@@ -239,88 +397,131 @@ function autoUpdateHeadingFromWinds() {
    Fetch live winds from GFS
 =================================== */
 async function fetchWinds() {
+  setLoadingState('winds-loading', true);
+
   try {
-    const url =
-      `${WIND_MODEL_URL}?latitude=${DZ_LAT}&longitude=${DZ_LON}` +
-      `&hourly=` +
-      `wind_speed_1000hPa,wind_direction_1000hPa,` +
-      `wind_speed_925hPa,wind_direction_925hPa,` +
-      `wind_speed_850hPa,wind_direction_850hPa,` +
-      `wind_speed_700hPa,wind_direction_700hPa,` +
-      `wind_speed_600hPa,wind_direction_600hPa` +
-      `&wind_speed_unit=kn&timezone=auto`;
+    // Wrap the fetch logic in a function that can be retried
+    const fetchWindsOnce = async () => {
+      const url =
+        `${WIND_MODEL_URL}?latitude=${DZ_LAT}&longitude=${DZ_LON}` +
+        `&hourly=` +
+        `wind_speed_1000hPa,wind_direction_1000hPa,` +
+        `wind_speed_925hPa,wind_direction_925hPa,` +
+        `wind_speed_850hPa,wind_direction_850hPa,` +
+        `wind_speed_700hPa,wind_direction_700hPa,` +
+        `wind_speed_600hPa,wind_direction_600hPa` +
+        `&wind_speed_unit=kn&timezone=auto`;
 
-    const res = await fetch(url);
-    const data = await res.json();
-    const ws = data.hourly;
+      const res = await fetch(url);
 
-    if (!ws || !ws.time || !ws.time.length) {
-      console.error("No hourly data from Open-Meteo:", data);
-      return;
-    }
-
-    const now = new Date();
-    let tIndex = 0;
-    let bestDiff = Infinity;
-
-    ws.time.forEach((tStr, i) => {
-      const t = new Date(tStr);
-      const diff = Math.abs(t.getTime() - now.getTime());
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        tIndex = i;
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       }
-    });
 
-    const windsByLevel = [];
+      const data = await res.json();
+      const ws = data.hourly;
 
-    function pushLevel(level) {
-      const speedArr = ws[`wind_speed_${level}hPa`];
-      const dirArr = ws[`wind_direction_${level}hPa`];
-      if (!speedArr || !dirArr) return;
+      if (!ws || !ws.time || !ws.time.length) {
+        throw new Error("Invalid data from weather API");
+      }
 
-      windsByLevel.push({
-        level,
-        altFt: approxAltitudeFtByLevel[level],
-        dirDeg: dirArr[tIndex],
-        speedKt: speedArr[tIndex]
-      });
-    }
+      const now = new Date();
+      let tIndex = 0;
+      let bestDiff = Infinity;
 
-    pressureLevels.forEach(pushLevel);
-
-    if (!windsByLevel.length) {
-      console.error("No windsByLevel from Open-Meteo:", ws);
-      return;
-    }
-
-    windsAloft = desiredAltitudesFt.map(altFt => {
-      let best = windsByLevel[0];
-      let bestDiffAlt = Math.abs(altFt - best.altFt);
-
-      windsByLevel.forEach(w => {
-        const d = Math.abs(altFt - w.altFt);
-        if (d < bestDiffAlt) {
-          best = w;
-          bestDiffAlt = d;
+      ws.time.forEach((tStr, i) => {
+        const t = new Date(tStr);
+        const diff = Math.abs(t.getTime() - now.getTime());
+        if (diff < bestDiff) {
+          bestDiff = diff;
+          tIndex = i;
         }
       });
 
-      return {
-        altFt,
-        dirDeg: best.dirDeg,
-        speedKt: best.speedKt
-      };
-    });
+      const windsByLevel = [];
+
+      function pushLevel(level) {
+        const speedArr = ws[`wind_speed_${level}hPa`];
+        const dirArr = ws[`wind_direction_${level}hPa`];
+        if (!speedArr || !dirArr) return;
+
+        windsByLevel.push({
+          level,
+          altFt: approxAltitudeFtByLevel[level],
+          dirDeg: dirArr[tIndex],
+          speedKt: speedArr[tIndex]
+        });
+      }
+
+      pressureLevels.forEach(pushLevel);
+
+      if (!windsByLevel.length) {
+        throw new Error("No valid wind data in response");
+      }
+
+      return desiredAltitudesFt.map(altFt => {
+        let best = windsByLevel[0];
+        let bestDiffAlt = Math.abs(altFt - best.altFt);
+
+        windsByLevel.forEach(w => {
+          const d = Math.abs(altFt - w.altFt);
+          if (d < bestDiffAlt) {
+            best = w;
+            bestDiffAlt = d;
+          }
+        });
+
+        return {
+          altFt,
+          dirDeg: best.dirDeg,
+          speedKt: best.speedKt
+        };
+      });
+    };
+
+    // Retry the fetch with exponential backoff (up to 3 retries)
+    windsAloft = await retryWithBackoff(fetchWindsOnce, 3, 2000);
+
+    // Update timestamp and save to cache
+    windsTimestamp = Date.now();
+    saveWindsToCache(windsAloft);
 
     renderWindsTable();
     autoUpdateHeadingFromWinds();
 
-    console.log("Open-Meteo time used:", ws.time[tIndex]);
-    console.log("windsAloft (mapped to ft):", windsAloft);
+    // Hide any existing error messages on success
+    hideBanner();
+
+    console.log("Winds fetched successfully");
 
   } catch (err) {
-    console.error("Auto heading: error loading winds", err);
+    console.error("Error loading winds from API after retries:", err);
+
+    // Try to fall back to cached winds
+    const cached = loadCachedWinds();
+    if (cached && cached.winds.length) {
+      console.log("Using cached winds as fallback");
+      windsAloft = cached.winds;
+      windsTimestamp = cached.timestamp;
+      renderWindsTable();
+      autoUpdateHeadingFromWinds();
+
+      const ageMinutes = Math.round(cached.age / 60000);
+      showBanner(
+        `Unable to fetch fresh wind data. Using cached data from ${ageMinutes} min ago.`,
+        'warning',
+        15000
+      );
+    } else {
+      console.error("No cached winds available");
+      showBanner(
+        'Unable to fetch wind data and no cached data available. Wind calculations may be unavailable.',
+        'error',
+        0 // Don't auto-hide
+      );
+    }
+  } finally {
+    setLoadingState('winds-loading', false);
   }
 }
 
@@ -608,6 +809,22 @@ async function fetchAircraftPosition() {
 }
 
 /* ================================
+   INITIALIZATION
+=================================== */
+
+// Try to load cached winds on startup
+function initializeFromCache() {
+  const cached = loadCachedWinds();
+  if (cached && cached.winds.length) {
+    windsAloft = cached.winds;
+    windsTimestamp = cached.timestamp;
+    renderWindsTable();
+    autoUpdateHeadingFromWinds();
+    console.log("Initialized with cached winds");
+  }
+}
+
+/* ================================
    AUTO-UPDATES
 =================================== */
 
@@ -615,10 +832,16 @@ async function fetchAircraftPosition() {
 updateJumpRun();
 renderWindsTable();
 
-// Load winds on page load
+// Try to load cached winds first for instant display
+initializeFromCache();
+
+// Load fresh winds on page load
 fetchWinds();
 // Refresh winds every hour
 setInterval(fetchWinds, 60 * 60 * 1000);
+
+// Update winds timestamp display every minute
+setInterval(updateWindsTimestampDisplay, 60 * 1000);
 
 // Start ADS-B polling (every 10 seconds)
 fetchAircraftPosition();

@@ -23,6 +23,9 @@
     Heading & spot auto-updated from winds.
   </div>
 
+  <!-- Error/Status Banner -->
+  <div id="error-banner" class="error-banner hidden"></div>
+
   <h2>Dropzone</h2>
   <div class="small">
     <span class="dz-dot"></span>
@@ -39,7 +42,10 @@
     Updated --
   </div>
 
-  <h2>Winds Aloft</h2>
+  <h2>
+    Winds Aloft
+    <span id="winds-loading" class="loading-spinner hidden"></span>
+  </h2>
   <table>
     <thead>
       <tr>
@@ -50,6 +56,9 @@
     </thead>
     <tbody id="winds-table-body"></tbody>
   </table>
+  <div class="small" id="winds-updated">
+    --
+  </div>
 
   <h2>Jump Aircraft</h2>
   <div class="small">
