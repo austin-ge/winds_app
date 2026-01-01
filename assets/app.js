@@ -647,7 +647,18 @@ L.tileLayer(
   }
 ).addTo(map);
 
-L.marker([DZ_LAT, DZ_LON]).addTo(map).bindPopup(DZ_NAME).openPopup();
+// Custom dropzone marker with pulsing effect
+const dzIcon = L.divIcon({
+  className: "dz-marker-icon",
+  html: '<div class="dz-marker-outer"><div class="dz-marker-inner">🎯</div></div>',
+  iconSize: [40, 40],
+  iconAnchor: [20, 20]
+});
+
+L.marker([DZ_LAT, DZ_LON], { icon: dzIcon })
+  .addTo(map)
+  .bindPopup(`<strong>${DZ_NAME}</strong><br>Dropzone Landing Area`)
+  .openPopup();
 
 let jumpRunGroup = null;
 
@@ -673,10 +684,19 @@ function updateJumpRun() {
     map.removeLayer(jumpRunGroup);
   }
 
+  // Enhanced jump run with glow effect (outer glow + inner line)
+  const glowLine = L.polyline([startLatLng, endLatLng], {
+    weight: 10,
+    color: "#4caf50",
+    opacity: 0.3,
+    className: "jump-run-glow"
+  });
+
   const mainLine = L.polyline([startLatLng, endLatLng], {
     weight: 5,
-    color: "#ffeb3b",
-    opacity: 0.9
+    color: "#76ff03",
+    opacity: 0.95,
+    className: "jump-run-main"
   });
 
   const arrowLenMeters = runMiles * METERS_PER_MILE * 0.12;
@@ -686,16 +706,29 @@ function updateJumpRun() {
   const left = destinationPoint(tipLat, tipLon, heading - 150, arrowLenMeters);
   const right = destinationPoint(tipLat, tipLon, heading + 150, arrowLenMeters);
 
+  const arrowGlowLeft = L.polyline(
+    [[tipLat, tipLon], [left.lat, left.lon]],
+    { weight: 10, color: "#4caf50", opacity: 0.3, className: "jump-run-glow" }
+  );
+  const arrowGlowRight = L.polyline(
+    [[tipLat, tipLon], [right.lat, right.lon]],
+    { weight: 10, color: "#4caf50", opacity: 0.3, className: "jump-run-glow" }
+  );
+
   const arrowLeft = L.polyline(
     [[tipLat, tipLon], [left.lat, left.lon]],
-    { weight: 5, color: "#ffeb3b", opacity: 0.9 }
+    { weight: 5, color: "#76ff03", opacity: 0.95, className: "jump-run-main" }
   );
   const arrowRight = L.polyline(
     [[tipLat, tipLon], [right.lat, right.lon]],
-    { weight: 5, color: "#ffeb3b", opacity: 0.9 }
+    { weight: 5, color: "#76ff03", opacity: 0.95, className: "jump-run-main" }
   );
 
-  jumpRunGroup = L.layerGroup([mainLine, arrowLeft, arrowRight]).addTo(map);
+  jumpRunGroup = L.layerGroup([
+    glowLine, mainLine,
+    arrowGlowLeft, arrowGlowRight,
+    arrowLeft, arrowRight
+  ]).addTo(map);
 
   // Map stays centered on DZ at zoom 15
 
@@ -759,22 +792,35 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
     jumpPlaneTrackCoords.shift();
   }
 
+  const rotation = trackDeg || 0;
+
   if (!jumpPlaneMarker) {
     const icon = L.divIcon({
       className: "aircraft-icon",
-      html: "✈️",
+      html: `<div class="aircraft-icon-inner" style="transform: rotate(${rotation}deg);">✈️</div>`,
       iconSize: [24, 24],
       iconAnchor: [12, 12]
     });
     jumpPlaneMarker = L.marker(latLng, { icon }).addTo(map);
   } else {
     jumpPlaneMarker.setLatLng(latLng);
+    // Update rotation
+    const iconElement = jumpPlaneMarker.getElement();
+    if (iconElement) {
+      const innerDiv = iconElement.querySelector('.aircraft-icon-inner');
+      if (innerDiv) {
+        innerDiv.style.transform = `rotate(${rotation}deg)`;
+      }
+    }
   }
 
   if (!jumpPlaneTrackLine) {
     jumpPlaneTrackLine = L.polyline(jumpPlaneTrackCoords, {
-      weight: 2,
-      dashArray: "4 4"
+      weight: 3,
+      color: "#9c27b0",
+      opacity: 0.7,
+      dashArray: "8 4",
+      className: "jump-plane-trail"
     }).addTo(map);
   } else {
     jumpPlaneTrackLine.setLatLngs(jumpPlaneTrackCoords);
@@ -802,6 +848,17 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
   }
 }
 
+// Helper: Get color based on altitude
+function getAltitudeColor(altFt) {
+  if (altFt >= 10000) {
+    return { fill: "#ff5252", stroke: "#d32f2f" }; // Red - High altitude (jump traffic)
+  } else if (altFt >= 5000) {
+    return { fill: "#ffa726", stroke: "#f57c00" }; // Orange - Medium altitude
+  } else {
+    return { fill: "#66bb6a", stroke: "#388e3c" }; // Green - Low altitude
+  }
+}
+
 // Brighter dots + tooltip for all traffic
 function updateAllTrafficMarkers(planes, excludeHex) {
   const seenHex = new Set();
@@ -821,6 +878,8 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     const alt = Math.round(a.alt_geom ?? a.alt_baro ?? 0);
     const gs  = a.gs != null ? Math.round(a.gs) : null;
 
+    const colors = getAltitudeColor(alt);
+
     let tooltipText = `${apiReg}\n${alt} ft`;
     if (gs !== null) {
       tooltipText += `\nGS ${gs} kt`;
@@ -829,6 +888,12 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     if (otherAircraftMarkers[hex]) {
       const marker = otherAircraftMarkers[hex];
       marker.setLatLng([lat, lon]);
+
+      // Update colors based on current altitude
+      marker.setStyle({
+        color: colors.stroke,
+        fillColor: colors.fill
+      });
 
       if (marker.setTooltipContent) {
         marker.setTooltipContent(tooltipText);
@@ -840,11 +905,12 @@ function updateAllTrafficMarkers(planes, excludeHex) {
       }
     } else {
       const marker = L.circleMarker([lat, lon], {
-        radius: 6,
-        weight: 1.5,
-        color: "#000000",
-        fillColor: "#00ffff",
-        fillOpacity: 0.9
+        radius: 7,
+        weight: 2,
+        color: colors.stroke,
+        fillColor: colors.fill,
+        fillOpacity: 0.85,
+        className: "traffic-marker"
       });
 
       marker.bindTooltip(tooltipText, {

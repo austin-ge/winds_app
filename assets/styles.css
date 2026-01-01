@@ -256,7 +256,18 @@ tbody tr.altitude-highlight {
   font-size: 20px;
   line-height: 20px;
   text-align: center;
-  text-shadow: 0 0 2px #000;
+  background: transparent !important;
+  border: none !important;
+}
+
+.aircraft-icon-inner {
+  font-size: 24px;
+  line-height: 24px;
+  text-shadow: 0 0 6px rgba(156, 39, 176, 1),
+               0 2px 4px rgba(0, 0, 0, 0.8);
+  filter: drop-shadow(0 0 4px rgba(156, 39, 176, 0.8));
+  transition: transform 2s linear;
+  display: inline-block;
 }
 
 /* ================================
@@ -381,6 +392,74 @@ tbody tr.altitude-highlight {
 /* Smooth circle marker transitions (for traffic dots) */
 path.leaflet-interactive {
   transition: transform 2s linear;
+}
+
+/* Enhanced jump run styling */
+.jump-run-glow {
+  filter: blur(2px);
+}
+
+.jump-run-main {
+  filter: drop-shadow(0 0 4px rgba(118, 255, 3, 0.8));
+}
+
+/* Custom Dropzone Marker */
+.dz-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.dz-marker-outer {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dz-marker-outer::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(244, 67, 54, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: dzPulse 2s ease-out infinite;
+}
+
+.dz-marker-inner {
+  font-size: 28px;
+  line-height: 28px;
+  text-shadow: 0 0 8px rgba(244, 67, 54, 0.8),
+               0 2px 4px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 0 4px rgba(244, 67, 54, 1));
+  z-index: 1;
+}
+
+@keyframes dzPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+}
+
+/* Traffic markers with subtle glow */
+.traffic-marker {
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+}
+
+/* Enhanced jump plane trail */
+.jump-plane-trail {
+  filter: drop-shadow(0 0 3px rgba(156, 39, 176, 0.8));
 }
 
 /* ================================
