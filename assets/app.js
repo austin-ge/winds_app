@@ -16,6 +16,10 @@ let currentHeadingDeg = 270;
 // Track where the current heading came from: "manual" or "auto-winds"
 let jumpRunSource = "auto-winds";
 
+// Jump run ground speed and exit separation
+let jumpRunGroundSpeedKnots = 0;
+let exitSeparationSeconds = 0;
+
 /* ================================
    LOCAL STORAGE CACHING
 =================================== */
@@ -364,8 +368,10 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     const exitPointOffsetMiles = openingPointOffsetMiles - freefallDriftAlongHeading;
 
     // 5. Final offset for the green light (start of jump run)
+    // Position green light at optimal exit point so FIRST group out gets the best spot.
+    // Subsequent groups exit progressively further upwind as plane continues jump run.
     const fudge = AIRPLANE_DRIFT_MILES + LIGHT_TO_DOOR_MILES;
-    let offset = exitPointOffsetMiles - (JUMP_RUN_LENGTH_MILES / 2) - fudge;
+    let offset = exitPointOffsetMiles - fudge;
 
     if (!Number.isFinite(offset)) offset = 0;
 
@@ -374,6 +380,77 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     if (offset < -maxOffset) offset = -maxOffset;
 
     return offset;
+}
+
+/* ================================
+   JUMP RUN GROUND SPEED & EXIT SEPARATION
+=================================== */
+function computeGroundSpeedAndSeparation(headingDeg) {
+  // Get wind at exit altitude
+  const exitWind = getWindAtAlt(EXIT_ALTITUDE_FT);
+  if (!exitWind) {
+    // No wind data, assume no wind effect
+    jumpRunGroundSpeedKnots = JUMP_RUN_AIRSPEED_KNOTS;
+    exitSeparationSeconds = getExitSeparation(jumpRunGroundSpeedKnots);
+    return;
+  }
+
+  // Convert jump run heading to radians
+  const headingRad = (headingDeg * Math.PI) / 180;
+  const headingUx = Math.sin(headingRad);
+  const headingUy = Math.cos(headingRad);
+
+  // Convert wind direction to radians (wind direction is where wind is FROM)
+  // So we need to flip it by 180 degrees to get wind vector direction
+  const windDirRad = ((exitWind.dirDeg + 180) % 360) * Math.PI / 180;
+  const windVectorX = exitWind.speedKt * Math.sin(windDirRad);
+  const windVectorY = exitWind.speedKt * Math.cos(windDirRad);
+
+  // Calculate wind component along jump run heading (positive = tailwind, negative = headwind)
+  const windAlongHeading = windVectorX * headingUx + windVectorY * headingUy;
+
+  // Ground speed = airspeed + tailwind (or - headwind)
+  jumpRunGroundSpeedKnots = JUMP_RUN_AIRSPEED_KNOTS + windAlongHeading;
+
+  // Ensure ground speed is positive
+  if (jumpRunGroundSpeedKnots < 0) jumpRunGroundSpeedKnots = 0;
+
+  // Calculate exit separation based on ground speed
+  exitSeparationSeconds = getExitSeparation(jumpRunGroundSpeedKnots);
+}
+
+/* Helper: Get exit separation time based on ground speed */
+function getExitSeparation(groundSpeedKnots) {
+  // Lookup table from user requirements
+  const separationTable = [
+    { groundSpeed: 100, separation: 6 },
+    { groundSpeed: 80, separation: 8 },
+    { groundSpeed: 70, separation: 9 },
+    { groundSpeed: 60, separation: 10 },
+    { groundSpeed: 50, separation: 12 },
+    { groundSpeed: 40, separation: 15 },
+    { groundSpeed: 30, separation: 20 },
+    { groundSpeed: 20, separation: 30 }
+  ];
+
+  // If ground speed is higher than max in table, use min separation
+  if (groundSpeedKnots >= 100) return 6;
+
+  // If ground speed is lower than min in table, use max separation
+  if (groundSpeedKnots <= 20) return 30;
+
+  // Linear interpolation between table values
+  for (let i = 0; i < separationTable.length - 1; i++) {
+    const upper = separationTable[i];
+    const lower = separationTable[i + 1];
+
+    if (groundSpeedKnots <= upper.groundSpeed && groundSpeedKnots >= lower.groundSpeed) {
+      const ratio = (upper.groundSpeed - groundSpeedKnots) / (upper.groundSpeed - lower.groundSpeed);
+      return Math.round(upper.separation + ratio * (lower.separation - upper.separation));
+    }
+  }
+
+  return 10; // Default fallback
 }
 
 /* Helper: a point at signed distance sMiles along the jump run axis */
@@ -577,6 +654,9 @@ let jumpRunGroup = null;
 function updateJumpRun() {
   const heading = currentHeadingDeg || 270;
 
+  // Calculate ground speed and exit separation
+  computeGroundSpeedAndSeparation(heading);
+
   const offset = jumpRunOffsetMiles || 0;
   const runMiles = JUMP_RUN_LENGTH_MILES;
 
@@ -620,6 +700,7 @@ function updateJumpRun() {
   // Map stays centered on DZ at zoom 15
 
   const summaryEl = document.getElementById("jump-run-summary");
+  const groundSpeedEl = document.getElementById("ground-speed-summary");
   const updatedEl = document.getElementById("jump-run-updated");
 
   if (summaryEl) {
@@ -628,6 +709,12 @@ function updateJumpRun() {
     const sign = offMi >= 0 ? "+" : "";
     const offStr = `${sign}${Math.abs(offMi).toFixed(2)}`;
     summaryEl.textContent = `${headingStr}° @ ${offStr}`;
+  }
+
+  if (groundSpeedEl) {
+    const groundSpeedStr = Math.round(jumpRunGroundSpeedKnots);
+    const separationStr = exitSeparationSeconds;
+    groundSpeedEl.textContent = `${groundSpeedStr} kts • ${separationStr} sec`;
   }
 
   if (updatedEl) {
