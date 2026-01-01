@@ -28,8 +28,8 @@ const approxAltitudeFtByLevel = {
 };
 
 // ADS-B Configuration
-// Change this if your ADS-B proxy runs on a different host/port
-const ADSB_ENDPOINT = "http://localhost:5000/adsb";
+// Uses nginx proxy configured in nginx.conf to fetch from adsb.lol
+const ADSB_ENDPOINT = "/adsb";
 
 // Jump Plane Configuration
 // Hex codes (ICAO 24-bit) for your jump planes (lowercase)
