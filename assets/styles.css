@@ -1,49 +1,256 @@
+/* ================================
+   BASE STYLES
+=================================== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   display: flex;
   height: 100vh;
+  background: #f5f5f5;
 }
 
+/* ================================
+   SIDEBAR
+=================================== */
 #sidebar {
-  width: 320px;
-  padding: 12px;
-  box-sizing: border-box;
-  border-right: 1px solid #ddd;
-  background: #fafafa;
-  overflow-y: auto;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, #e3f2fd 0%, #ffffff 100%);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
 }
 
-#map { flex: 1; }
+/* Header */
+.sidebar-header {
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  color: white;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
 
-h1 { font-size: 1.1rem; margin: 0 0 8px; }
-h2 { font-size: 0.95rem; margin: 12px 0 4px; }
+.sidebar-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
 
+.tagline {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* Content */
+.sidebar-content {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ================================
+   CARDS
+=================================== */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 0;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border-left: 3px solid #2196f3;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.card-jump-run {
+  border-left-color: #4caf50;
+}
+
+.card-winds {
+  border-left-color: #ff9800;
+}
+
+.card-aircraft {
+  border-left-color: #9c27b0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(to bottom, #fafafa, #ffffff);
+}
+
+.card-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  flex: 1;
+}
+
+.card-body {
+  padding: 12px;
+}
+
+/* ================================
+   DROPZONE
+=================================== */
+.dz-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dz-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f44336;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2);
+  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(244, 67, 54, 0.1);
+  }
+}
+
+/* ================================
+   JUMP RUN
+=================================== */
+.jump-run-display {
+  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.jump-run-main {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.jump-run-label {
+  font-size: 0.7rem;
+  opacity: 0.9;
+  margin-top: 4px;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+/* ================================
+   WINDS TABLE
+=================================== */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 6px;
   font-size: 0.8rem;
 }
 
-th, td {
-  border-bottom: 1px solid #ddd;
-  padding: 4px;
+thead {
+  background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+}
+
+th {
+  padding: 6px 8px;
   text-align: right;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #555;
+  border-bottom: 2px solid #bdbdbd;
 }
 
-th { background: #eee; }
-
-.dz-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: #c00;
-  display: inline-block;
-  margin-right: 4px;
+td {
+  padding: 6px 8px;
+  text-align: right;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.small { font-size: 0.75rem; color: #666; }
+tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+tbody tr:hover {
+  background: #e3f2fd;
+}
+
+tbody tr.altitude-highlight {
+  background: #fff3e0 !important;
+  font-weight: 600;
+}
+
+/* Wind direction arrow */
+.wind-dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wind-arrow {
+  font-size: 0.9rem;
+}
+
+/* Wind speed color coding */
+.wind-speed-low {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.wind-speed-med {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.wind-speed-high {
+  color: #f44336;
+  font-weight: 600;
+}
+
+/* ================================
+   AIRCRAFT
+=================================== */
+.aircraft-display {
+  margin-top: 8px;
+  padding: 10px;
+  background: #f3e5f5;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.aircraft-display strong {
+  color: #9c27b0;
+  font-size: 0.85rem;
+}
 
 .aircraft-icon {
   font-size: 20px;
@@ -52,19 +259,66 @@ th { background: #eee; }
   text-shadow: 0 0 2px #000;
 }
 
-.jump-run-main {
-  font-size: 1rem;
-  font-weight: 700;
+/* ================================
+   UTILITY CLASSES
+=================================== */
+.small {
+  font-size: 0.75rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.timestamp {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
   margin-top: 4px;
 }
 
-/* Error/Status Banner */
+.status-good {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-warning {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ================================
+   ERROR BANNER
+=================================== */
 .error-banner {
   padding: 8px 10px;
-  margin: 8px 0;
+  margin: 8px 16px;
   border-radius: 4px;
   font-size: 0.75rem;
   line-height: 1.4;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .error-banner.error {
@@ -91,17 +345,15 @@ th { background: #eee; }
   color: #1b5e20;
 }
 
-.hidden {
-  display: none !important;
-}
-
-/* Loading Spinner */
+/* ================================
+   LOADING SPINNER
+=================================== */
 .loading-spinner {
   display: inline-block;
   width: 14px;
   height: 14px;
   border: 2px solid #ddd;
-  border-top-color: #666;
+  border-top-color: #1976d2;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-left: 6px;
@@ -109,5 +361,33 @@ th { background: #eee; }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================================
+   MAP
+=================================== */
+#map {
+  flex: 1;
+}
+
+/* ================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100%;
+    max-height: 50vh;
+  }
+
+  #map {
+    flex: 1;
+    min-height: 50vh;
+  }
 }

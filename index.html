@@ -5,6 +5,11 @@
   <title>Skydive DZ Winds & Jump Run</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
@@ -17,55 +22,83 @@
 <body>
 
 <div id="sidebar">
-  <h1>Winds & Jump Run</h1>
-  <div class="small">
-    Live upper-air winds from GFS via Open-Meteo.<br>
-    Heading & spot auto-updated from winds.
+  <!-- Header -->
+  <div class="sidebar-header">
+    <h1>💨 Winds & Jump Run</h1>
+    <div class="tagline">Live GFS upper-air data • Auto-calculated heading</div>
   </div>
 
   <!-- Error/Status Banner -->
   <div id="error-banner" class="error-banner hidden"></div>
 
-  <h2>Dropzone</h2>
-  <div class="small">
-    <span class="dz-dot"></span>
-    <span id="dz-name">Your DZ Name</span><br>
-    Lat: <span id="dz-lat"></span>,
-    Lon: <span id="dz-lon"></span>
-  </div>
+  <div class="sidebar-content">
+    <!-- Dropzone Card -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">📍</span>
+        <h2 class="card-title">Dropzone</h2>
+      </div>
+      <div class="card-body">
+        <div class="dz-info">
+          <span class="dz-dot"></span>
+          <div>
+            <strong><span id="dz-name">Your DZ Name</span></strong><br>
+            <span class="small"><span id="dz-lat"></span>, <span id="dz-lon"></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <h2>Jump Run</h2>
-  <div id="jump-run-summary" class="jump-run-main">
-    Jump Run ---@+0.00
-  </div>
-  <div class="small" id="jump-run-updated">
-    Updated --
-  </div>
+    <!-- Jump Run Card -->
+    <div class="card card-jump-run">
+      <div class="card-header">
+        <span class="card-icon">✈️</span>
+        <h2 class="card-title">Jump Run</h2>
+      </div>
+      <div class="card-body">
+        <div class="jump-run-display">
+          <div id="jump-run-summary" class="jump-run-main">---° @ +0.00</div>
+          <div class="jump-run-label">HEADING • OFFSET (MI)</div>
+        </div>
+        <div class="timestamp" id="jump-run-updated">Updated --</div>
+      </div>
+    </div>
 
-  <h2>
-    Winds Aloft
-    <span id="winds-loading" class="loading-spinner hidden"></span>
-  </h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Alt (ft)</th>
-        <th>Dir (°)</th>
-        <th>Spd (kt)</th>
-      </tr>
-    </thead>
-    <tbody id="winds-table-body"></tbody>
-  </table>
-  <div class="small" id="winds-updated">
-    --
-  </div>
+    <!-- Winds Aloft Card -->
+    <div class="card card-winds">
+      <div class="card-header">
+        <span class="card-icon">🌬️</span>
+        <h2 class="card-title">Winds Aloft</h2>
+        <span id="winds-loading" class="loading-spinner hidden"></span>
+      </div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Alt (ft)</th>
+              <th>Dir (°)</th>
+              <th>Spd (kt)</th>
+            </tr>
+          </thead>
+          <tbody id="winds-table-body"></tbody>
+        </table>
+        <div id="winds-updated" class="timestamp">--</div>
+      </div>
+    </div>
 
-  <h2>Jump Aircraft</h2>
-  <div class="small">
-    Tracks N692DA / N693DA / N694DA / N698DA near the DZ.
-  </div>
-  <div class="small" id="aircraft-status">
-    No jump aircraft currently tracked.
+    <!-- Jump Aircraft Card -->
+    <div class="card card-aircraft">
+      <div class="card-header">
+        <span class="card-icon">🛩️</span>
+        <h2 class="card-title">Jump Aircraft</h2>
+      </div>
+      <div class="card-body">
+        <div class="small">Tracks N692DA / N693DA / N694DA / N698DA near the DZ.</div>
+        <div id="aircraft-status" class="aircraft-display">
+          No jump aircraft currently tracked.
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

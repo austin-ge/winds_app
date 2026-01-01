@@ -205,6 +205,21 @@ function getWindAtAlt(altFt) {
 /* ================================
    Render Winds Table & Update Timestamp
 =================================== */
+
+// Get wind direction arrow based on degrees
+function getWindArrow(degrees) {
+  const arrows = ['↓', '↙', '←', '↖', '↑', '↗', '→', '↘'];
+  const index = Math.round(((degrees % 360) / 45)) % 8;
+  return arrows[index];
+}
+
+// Get wind speed class based on knots
+function getWindSpeedClass(knots) {
+  if (knots < 15) return 'wind-speed-low';
+  if (knots < 25) return 'wind-speed-med';
+  return 'wind-speed-high';
+}
+
 function renderWindsTable() {
   const tbody = document.getElementById("winds-table-body");
   tbody.innerHTML = "";
@@ -217,10 +232,21 @@ function renderWindsTable() {
 
   windsAloft.forEach(w => {
     const tr = document.createElement("tr");
+    const windSpeed = Math.round(w.speedKt);
+    const windDir = Math.round(w.dirDeg);
+    const arrow = getWindArrow(windDir);
+    const speedClass = getWindSpeedClass(windSpeed);
+
+    // Highlight opening and exit altitudes
+    const isHighlightAlt = (w.altFt === OPENING_ALTITUDE_FT || w.altFt === EXIT_ALTITUDE_FT);
+    if (isHighlightAlt) {
+      tr.classList.add('altitude-highlight');
+    }
+
     tr.innerHTML = `
       <td>${w.altFt}</td>
-      <td>${Math.round(w.dirDeg)}</td>
-      <td>${Math.round(w.speedKt)}</td>
+      <td><span class="wind-dir"><span class="wind-arrow">${arrow}</span>${windDir}</span></td>
+      <td class="${speedClass}">${windSpeed}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -601,15 +627,14 @@ function updateJumpRun() {
     const offMi = jumpRunOffsetMiles || 0;
     const sign = offMi >= 0 ? "+" : "";
     const offStr = `${sign}${Math.abs(offMi).toFixed(2)}`;
-    summaryEl.textContent = `Jump Run ${headingStr}@${offStr}`;
+    summaryEl.textContent = `${headingStr}° @ ${offStr}`;
   }
 
   if (updatedEl) {
     const now = new Date();
     const timeStr = now.toLocaleTimeString([], {
       hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
+      minute: "2-digit"
     });
     updatedEl.textContent = `Updated ${timeStr}`;
   }
@@ -680,13 +705,13 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
     const alt = Math.round(altRaw);
     const gs = planeMeta.gs != null ? Math.round(planeMeta.gs) : null;
 
-    let text = `Tracking: ${tail}`;
-    if (hex) text += ` (${hex.toUpperCase()})`;
-    text += ` at ${alt} ft`;
+    let html = `<strong>${tail}</strong><br><span class="small">`;
+    html += `🔼 ${alt.toLocaleString()} ft`;
     if (gs !== null) {
-      text += `, GS ${gs} kt`;
+      html += ` • ➡️ ${gs} kt GS`;
     }
-    statusEl.textContent = text;
+    html += `</span>`;
+    statusEl.innerHTML = html;
   }
 }
 
