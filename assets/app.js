@@ -767,42 +767,58 @@ let jumpPlaneMarker = null;
 let jumpPlaneTrackLine = null;
 let jumpPlaneTrackCoords = [];
 let otherAircraftMarkers = {};
-let aircraftTargetPositions = {}; // Store target positions for smooth interpolation
+let aircraftPositionBuffers = {}; // Store buffer of recent positions for smooth playback
+let playbackDelay = 20000; // 20 second delay for buffered playback (in milliseconds)
 let animationFrameId = null;
 
-// Smooth position interpolation for traffic markers
+// Smooth position playback using buffered positions
 function animateTrafficMarkers() {
-  const interpolationSpeed = 0.1; // Adjust for smoother/faster movement (0.05 = slower, 0.2 = faster)
-  let hasMovement = false;
+  const now = Date.now();
+  const playbackTime = now - playbackDelay; // Look back in time for delayed playback
 
   Object.entries(otherAircraftMarkers).forEach(([hex, marker]) => {
-    const target = aircraftTargetPositions[hex];
-    if (!target) return;
+    const buffer = aircraftPositionBuffers[hex];
+    if (!buffer || buffer.length < 2) return;
 
-    const current = marker.getLatLng();
-    const latDiff = target.lat - current.lat;
-    const lngDiff = target.lng - current.lng;
+    // Remove old positions from buffer (older than we need)
+    while (buffer.length > 0 && buffer[0].timestamp < playbackTime - 30000) {
+      buffer.shift();
+    }
 
-    // If we're close enough, snap to target
-    if (Math.abs(latDiff) < 0.00001 && Math.abs(lngDiff) < 0.00001) {
+    // Find the two positions to interpolate between
+    let beforePos = null;
+    let afterPos = null;
+
+    for (let i = 0; i < buffer.length - 1; i++) {
+      if (buffer[i].timestamp <= playbackTime && buffer[i + 1].timestamp >= playbackTime) {
+        beforePos = buffer[i];
+        afterPos = buffer[i + 1];
+        break;
+      }
+    }
+
+    // If we don't have bracketing positions, use the closest one
+    if (!beforePos || !afterPos) {
+      if (buffer.length > 0) {
+        const closestPos = buffer[buffer.length - 1];
+        marker.setLatLng([closestPos.lat, closestPos.lng]);
+      }
       return;
     }
 
-    hasMovement = true;
+    // Interpolate between the two positions
+    const timeDiff = afterPos.timestamp - beforePos.timestamp;
+    const timeProgress = playbackTime - beforePos.timestamp;
+    const ratio = timeDiff > 0 ? timeProgress / timeDiff : 0;
 
-    // Interpolate towards target position
-    const newLat = current.lat + latDiff * interpolationSpeed;
-    const newLng = current.lng + lngDiff * interpolationSpeed;
+    const interpolatedLat = beforePos.lat + (afterPos.lat - beforePos.lat) * ratio;
+    const interpolatedLng = beforePos.lng + (afterPos.lng - beforePos.lng) * ratio;
 
-    marker.setLatLng([newLat, newLng]);
+    marker.setLatLng([interpolatedLat, interpolatedLng]);
   });
 
-  // Continue animation if there's still movement
-  if (hasMovement) {
-    animationFrameId = requestAnimationFrame(animateTrafficMarkers);
-  } else {
-    animationFrameId = null;
-  }
+  // Always continue animating
+  animationFrameId = requestAnimationFrame(animateTrafficMarkers);
 }
 
 // Start animation loop if not already running
@@ -921,6 +937,7 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     const apiReg = a.r || a.registration || hex.toUpperCase();
     const alt = Math.round(a.alt_geom ?? a.alt_baro ?? 0);
     const gs  = a.gs != null ? Math.round(a.gs) : null;
+    const track = a.track != null ? a.track : (a.heading != null ? a.heading : null);
 
     const colors = getAltitudeColor(alt);
 
@@ -932,8 +949,15 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     if (otherAircraftMarkers[hex]) {
       const marker = otherAircraftMarkers[hex];
 
-      // Store target position for smooth interpolation
-      aircraftTargetPositions[hex] = { lat, lng: lon };
+      // Add position to buffer for smooth playback
+      if (!aircraftPositionBuffers[hex]) {
+        aircraftPositionBuffers[hex] = [];
+      }
+      aircraftPositionBuffers[hex].push({
+        lat,
+        lng: lon,
+        timestamp: Date.now()
+      });
 
       // Update colors based on current altitude
       marker.setStyle({
@@ -967,8 +991,12 @@ function updateAllTrafficMarkers(planes, excludeHex) {
       marker.addTo(map);
       otherAircraftMarkers[hex] = marker;
 
-      // Store initial position as target
-      aircraftTargetPositions[hex] = { lat, lng: lon };
+      // Initialize position buffer
+      aircraftPositionBuffers[hex] = [{
+        lat,
+        lng: lon,
+        timestamp: Date.now()
+      }];
     }
   });
 
@@ -977,7 +1005,7 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     if (!seenHex.has(hex)) {
       map.removeLayer(marker);
       delete otherAircraftMarkers[hex];
-      delete aircraftTargetPositions[hex];
+      delete aircraftPositionBuffers[hex];
     }
   });
 
