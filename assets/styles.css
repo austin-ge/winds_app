@@ -373,6 +373,16 @@ tbody tr.altitude-highlight {
   flex: 1;
 }
 
+/* Smooth aircraft position transitions */
+.leaflet-marker-icon.aircraft-icon {
+  transition: transform 2s linear;
+}
+
+/* Smooth circle marker transitions (for traffic dots) */
+path.leaflet-interactive {
+  transition: transform 2s linear;
+}
+
 /* ================================
    RESPONSIVE
 =================================== */
