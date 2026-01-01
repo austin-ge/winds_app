@@ -389,10 +389,7 @@ tbody tr.altitude-highlight {
   transition: transform 2s linear;
 }
 
-/* Smooth circle marker transitions (for traffic dots) */
-path.leaflet-interactive {
-  transition: transform 2s linear;
-}
+/* Traffic dots use JavaScript interpolation for smooth movement */
 
 /* Enhanced jump run styling */
 .jump-run-glow {

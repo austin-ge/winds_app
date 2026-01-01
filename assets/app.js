@@ -767,6 +767,50 @@ let jumpPlaneMarker = null;
 let jumpPlaneTrackLine = null;
 let jumpPlaneTrackCoords = [];
 let otherAircraftMarkers = {};
+let aircraftTargetPositions = {}; // Store target positions for smooth interpolation
+let animationFrameId = null;
+
+// Smooth position interpolation for traffic markers
+function animateTrafficMarkers() {
+  const interpolationSpeed = 0.1; // Adjust for smoother/faster movement (0.05 = slower, 0.2 = faster)
+  let hasMovement = false;
+
+  Object.entries(otherAircraftMarkers).forEach(([hex, marker]) => {
+    const target = aircraftTargetPositions[hex];
+    if (!target) return;
+
+    const current = marker.getLatLng();
+    const latDiff = target.lat - current.lat;
+    const lngDiff = target.lng - current.lng;
+
+    // If we're close enough, snap to target
+    if (Math.abs(latDiff) < 0.00001 && Math.abs(lngDiff) < 0.00001) {
+      return;
+    }
+
+    hasMovement = true;
+
+    // Interpolate towards target position
+    const newLat = current.lat + latDiff * interpolationSpeed;
+    const newLng = current.lng + lngDiff * interpolationSpeed;
+
+    marker.setLatLng([newLat, newLng]);
+  });
+
+  // Continue animation if there's still movement
+  if (hasMovement) {
+    animationFrameId = requestAnimationFrame(animateTrafficMarkers);
+  } else {
+    animationFrameId = null;
+  }
+}
+
+// Start animation loop if not already running
+function startTrafficAnimation() {
+  if (!animationFrameId) {
+    animationFrameId = requestAnimationFrame(animateTrafficMarkers);
+  }
+}
 
 function clearJumpPlaneHighlight() {
   if (jumpPlaneMarker) {
@@ -887,7 +931,9 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
     if (otherAircraftMarkers[hex]) {
       const marker = otherAircraftMarkers[hex];
-      marker.setLatLng([lat, lon]);
+
+      // Store target position for smooth interpolation
+      aircraftTargetPositions[hex] = { lat, lng: lon };
 
       // Update colors based on current altitude
       marker.setStyle({
@@ -920,15 +966,23 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
       marker.addTo(map);
       otherAircraftMarkers[hex] = marker;
+
+      // Store initial position as target
+      aircraftTargetPositions[hex] = { lat, lng: lon };
     }
   });
 
+  // Clean up markers that are no longer present
   Object.entries(otherAircraftMarkers).forEach(([hex, marker]) => {
     if (!seenHex.has(hex)) {
       map.removeLayer(marker);
       delete otherAircraftMarkers[hex];
+      delete aircraftTargetPositions[hex];
     }
   });
+
+  // Start smooth animation
+  startTrafficAnimation();
 }
 
 async function fetchAircraftPosition() {
