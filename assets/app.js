@@ -224,6 +224,83 @@ function getWindSpeedClass(knots) {
   return 'wind-speed-high';
 }
 
+// Group consecutive winds with identical speed/direction into altitude ranges
+// Protected altitudes (exit/opening) are always rendered individually
+function groupWindsByRange(windsArray) {
+  if (!windsArray || windsArray.length === 0) {
+    return [];
+  }
+
+  const PROTECTED_ALTS = [OPENING_ALTITUDE_FT, EXIT_ALTITUDE_FT];
+  const results = [];
+  let currentGroup = null;
+
+  // Helper: Check if two winds are identical (rounded to integers)
+  function windsMatch(wind1, wind2) {
+    return Math.round(wind1.dirDeg) === Math.round(wind2.dirDeg) &&
+           Math.round(wind1.speedKt) === Math.round(wind2.speedKt);
+  }
+
+  // Helper: Check if altitude is protected (exit/opening)
+  function isProtectedAltitude(altFt) {
+    return PROTECTED_ALTS.includes(altFt);
+  }
+
+  // Helper: Create group object
+  function createGroup(wind, isProtected = false) {
+    return {
+      startAlt: wind.altFt,
+      endAlt: wind.altFt,
+      dirDeg: wind.dirDeg,
+      speedKt: wind.speedKt,
+      isRange: false,
+      isHighlight: isProtected
+    };
+  }
+
+  // Helper: Finalize and push current group
+  function finalizeGroup(group) {
+    if (group) {
+      group.isRange = group.startAlt !== group.endAlt;
+      results.push(group);
+    }
+  }
+
+  // Process each wind altitude
+  for (let i = 0; i < windsArray.length; i++) {
+    const wind = windsArray[i];
+
+    // Handle protected altitudes - always standalone
+    if (isProtectedAltitude(wind.altFt)) {
+      // Close any existing group
+      finalizeGroup(currentGroup);
+      currentGroup = null;
+
+      // Add protected altitude as standalone row
+      results.push(createGroup(wind, true));
+      continue;
+    }
+
+    // Handle regular altitudes - group if possible
+    if (!currentGroup) {
+      // Start new group
+      currentGroup = createGroup(wind);
+    } else if (windsMatch(wind, currentGroup)) {
+      // Extend current group
+      currentGroup.endAlt = wind.altFt;
+    } else {
+      // Winds changed - finalize current group and start new one
+      finalizeGroup(currentGroup);
+      currentGroup = createGroup(wind);
+    }
+  }
+
+  // Finalize last group if exists
+  finalizeGroup(currentGroup);
+
+  return results;
+}
+
 function renderWindsTable() {
   const tbody = document.getElementById("winds-table-body");
   tbody.innerHTML = "";
@@ -234,21 +311,31 @@ function renderWindsTable() {
     return;
   }
 
-  windsAloft.forEach(w => {
+  // Group consecutive identical winds into ranges
+  const groupedWinds = groupWindsByRange(windsAloft);
+
+  groupedWinds.forEach(group => {
     const tr = document.createElement("tr");
-    const windSpeed = Math.round(w.speedKt);
-    const windDir = Math.round(w.dirDeg);
+    const windSpeed = Math.round(group.speedKt);
+    const windDir = Math.round(group.dirDeg);
     const arrow = getWindArrow(windDir);
     const speedClass = getWindSpeedClass(windSpeed);
 
-    // Highlight opening and exit altitudes
-    const isHighlightAlt = (w.altFt === OPENING_ALTITUDE_FT || w.altFt === EXIT_ALTITUDE_FT);
-    if (isHighlightAlt) {
+    // Format altitude: range or single altitude
+    let altDisplay;
+    if (group.isRange) {
+      altDisplay = `${group.startAlt}-${group.endAlt}`;
+    } else {
+      altDisplay = group.startAlt.toString();
+    }
+
+    // Highlight exit and opening altitudes
+    if (group.isHighlight) {
       tr.classList.add('altitude-highlight');
     }
 
     tr.innerHTML = `
-      <td>${w.altFt}</td>
+      <td>${altDisplay}</td>
       <td><span class="wind-dir"><span class="wind-arrow">${arrow}</span>${windDir}</span></td>
       <td class="${speedClass}">${windSpeed}</td>
     `;
