@@ -460,12 +460,45 @@ tbody tr.altitude-highlight {
 }
 
 /* ================================
-   RESPONSIVE
+   RESPONSIVE DESIGN - MOBILE FIRST
 =================================== */
+
+/* Very small phones (320px - 480px) */
+@media (max-width: 480px) {
+  /* Reduce all padding/spacing */
+  .sidebar-content { padding: 12px; }
+  .card { padding: 8px; margin-bottom: 8px; }
+
+  /* Scale down typography */
+  .sidebar-header h1 { font-size: 1.1rem; }
+  .sidebar-header p { font-size: 0.75rem; }
+  .jump-run-main { font-size: 1.4rem; }
+  .jump-run-label { font-size: 0.7rem; }
+
+  /* Optimize sidebar height */
+  #sidebar { max-height: 40vh; }
+  #map { min-height: 60vh; }
+
+  /* Table optimizations */
+  table { font-size: 0.75rem; }
+  td { padding: 3px 6px; }
+}
+
+/* Small phones and phablets (481px - 640px) */
+@media (max-width: 640px) {
+  .sidebar-content { padding: 14px; }
+  .card { padding: 10px; margin-bottom: 10px; }
+
+  .sidebar-header h1 { font-size: 1.2rem; }
+  .jump-run-main { font-size: 1.6rem; }
+
+  #sidebar { max-height: 45vh; }
+  #map { min-height: 55vh; }
+}
+
+/* Tablets and large phones (641px - 768px) */
 @media (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
+  body { flex-direction: column; }
 
   #sidebar {
     width: 100%;
@@ -475,5 +508,45 @@ tbody tr.altitude-highlight {
   #map {
     flex: 1;
     min-height: 50vh;
+  }
+}
+
+/* Landscape mobile devices */
+@media (max-width: 768px) and (orientation: landscape) {
+  #sidebar {
+    max-height: 40vh;  /* Reduce sidebar in landscape */
+  }
+
+  #map {
+    min-height: 60vh;  /* More space for map */
+  }
+
+  /* Make cards more compact in landscape */
+  .card { padding: 8px; margin-bottom: 8px; }
+  .sidebar-content { padding: 12px; }
+}
+
+/* Small tablets and large phones landscape (769px - 1024px) */
+@media (max-width: 1024px) {
+  #sidebar {
+    width: 300px;  /* Slightly narrower sidebar */
+  }
+
+  /* Slightly reduce padding on medium screens */
+  .sidebar-content { padding: 14px; }
+  .card { padding: 11px; }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  #sidebar {
+    width: 340px;  /* Full sidebar width */
+  }
+}
+
+/* Table overflow protection for very narrow screens */
+@media (max-width: 375px) {
+  table {
+    min-width: 280px;  /* Prevent table from becoming too cramped */
   }
 }
