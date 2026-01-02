@@ -743,9 +743,7 @@ const dzIcon = L.divIcon({
 });
 
 L.marker([DZ_LAT, DZ_LON], { icon: dzIcon })
-  .addTo(map)
-  .bindPopup(`<strong>${DZ_NAME}</strong><br>Dropzone Landing Area`)
-  .openPopup();
+  .addTo(map);
 
 let jumpRunGroup = null;
 
