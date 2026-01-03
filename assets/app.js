@@ -16,6 +16,10 @@ let currentHeadingDeg = 270;
 // Track where the current heading came from: "manual" or "auto-winds"
 let jumpRunSource = "auto-winds";
 
+// Jump run ground speed and exit separation
+let jumpRunGroundSpeedKnots = 0;
+let exitSeparationSeconds = 0;
+
 /* ================================
    LOCAL STORAGE CACHING
 =================================== */
@@ -220,6 +224,83 @@ function getWindSpeedClass(knots) {
   return 'wind-speed-high';
 }
 
+// Group consecutive winds with identical speed/direction into altitude ranges
+// Protected altitudes (exit/opening) are always rendered individually
+function groupWindsByRange(windsArray) {
+  if (!windsArray || windsArray.length === 0) {
+    return [];
+  }
+
+  const PROTECTED_ALTS = [OPENING_ALTITUDE_FT, EXIT_ALTITUDE_FT];
+  const results = [];
+  let currentGroup = null;
+
+  // Helper: Check if two winds are identical (rounded to integers)
+  function windsMatch(wind1, wind2) {
+    return Math.round(wind1.dirDeg) === Math.round(wind2.dirDeg) &&
+           Math.round(wind1.speedKt) === Math.round(wind2.speedKt);
+  }
+
+  // Helper: Check if altitude is protected (exit/opening)
+  function isProtectedAltitude(altFt) {
+    return PROTECTED_ALTS.includes(altFt);
+  }
+
+  // Helper: Create group object
+  function createGroup(wind, isProtected = false) {
+    return {
+      startAlt: wind.altFt,
+      endAlt: wind.altFt,
+      dirDeg: wind.dirDeg,
+      speedKt: wind.speedKt,
+      isRange: false,
+      isHighlight: isProtected
+    };
+  }
+
+  // Helper: Finalize and push current group
+  function finalizeGroup(group) {
+    if (group) {
+      group.isRange = group.startAlt !== group.endAlt;
+      results.push(group);
+    }
+  }
+
+  // Process each wind altitude
+  for (let i = 0; i < windsArray.length; i++) {
+    const wind = windsArray[i];
+
+    // Handle protected altitudes - always standalone
+    if (isProtectedAltitude(wind.altFt)) {
+      // Close any existing group
+      finalizeGroup(currentGroup);
+      currentGroup = null;
+
+      // Add protected altitude as standalone row
+      results.push(createGroup(wind, true));
+      continue;
+    }
+
+    // Handle regular altitudes - group if possible
+    if (!currentGroup) {
+      // Start new group
+      currentGroup = createGroup(wind);
+    } else if (windsMatch(wind, currentGroup)) {
+      // Extend current group
+      currentGroup.endAlt = wind.altFt;
+    } else {
+      // Winds changed - finalize current group and start new one
+      finalizeGroup(currentGroup);
+      currentGroup = createGroup(wind);
+    }
+  }
+
+  // Finalize last group if exists
+  finalizeGroup(currentGroup);
+
+  return results;
+}
+
 function renderWindsTable() {
   const tbody = document.getElementById("winds-table-body");
   tbody.innerHTML = "";
@@ -230,21 +311,31 @@ function renderWindsTable() {
     return;
   }
 
-  windsAloft.forEach(w => {
+  // Group consecutive identical winds into ranges
+  const groupedWinds = groupWindsByRange(windsAloft);
+
+  groupedWinds.forEach(group => {
     const tr = document.createElement("tr");
-    const windSpeed = Math.round(w.speedKt);
-    const windDir = Math.round(w.dirDeg);
+    const windSpeed = Math.round(group.speedKt);
+    const windDir = Math.round(group.dirDeg);
     const arrow = getWindArrow(windDir);
     const speedClass = getWindSpeedClass(windSpeed);
 
-    // Highlight opening and exit altitudes
-    const isHighlightAlt = (w.altFt === OPENING_ALTITUDE_FT || w.altFt === EXIT_ALTITUDE_FT);
-    if (isHighlightAlt) {
+    // Format altitude: range or single altitude
+    let altDisplay;
+    if (group.isRange) {
+      altDisplay = `${group.startAlt}-${group.endAlt}`;
+    } else {
+      altDisplay = group.startAlt.toString();
+    }
+
+    // Highlight exit and opening altitudes
+    if (group.isHighlight) {
       tr.classList.add('altitude-highlight');
     }
 
     tr.innerHTML = `
-      <td>${w.altFt}</td>
+      <td>${altDisplay}</td>
       <td><span class="wind-dir"><span class="wind-arrow">${arrow}</span>${windDir}</span></td>
       <td class="${speedClass}">${windSpeed}</td>
     `;
@@ -364,8 +455,10 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     const exitPointOffsetMiles = openingPointOffsetMiles - freefallDriftAlongHeading;
 
     // 5. Final offset for the green light (start of jump run)
+    // Position green light at optimal exit point so FIRST group out gets the best spot.
+    // Subsequent groups exit progressively further upwind as plane continues jump run.
     const fudge = AIRPLANE_DRIFT_MILES + LIGHT_TO_DOOR_MILES;
-    let offset = exitPointOffsetMiles - (JUMP_RUN_LENGTH_MILES / 2) - fudge;
+    let offset = exitPointOffsetMiles - fudge;
 
     if (!Number.isFinite(offset)) offset = 0;
 
@@ -374,6 +467,77 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     if (offset < -maxOffset) offset = -maxOffset;
 
     return offset;
+}
+
+/* ================================
+   JUMP RUN GROUND SPEED & EXIT SEPARATION
+=================================== */
+function computeGroundSpeedAndSeparation(headingDeg) {
+  // Get wind at exit altitude
+  const exitWind = getWindAtAlt(EXIT_ALTITUDE_FT);
+  if (!exitWind) {
+    // No wind data, assume no wind effect
+    jumpRunGroundSpeedKnots = JUMP_RUN_AIRSPEED_KNOTS;
+    exitSeparationSeconds = getExitSeparation(jumpRunGroundSpeedKnots);
+    return;
+  }
+
+  // Convert jump run heading to radians
+  const headingRad = (headingDeg * Math.PI) / 180;
+  const headingUx = Math.sin(headingRad);
+  const headingUy = Math.cos(headingRad);
+
+  // Convert wind direction to radians (wind direction is where wind is FROM)
+  // So we need to flip it by 180 degrees to get wind vector direction
+  const windDirRad = ((exitWind.dirDeg + 180) % 360) * Math.PI / 180;
+  const windVectorX = exitWind.speedKt * Math.sin(windDirRad);
+  const windVectorY = exitWind.speedKt * Math.cos(windDirRad);
+
+  // Calculate wind component along jump run heading (positive = tailwind, negative = headwind)
+  const windAlongHeading = windVectorX * headingUx + windVectorY * headingUy;
+
+  // Ground speed = airspeed + tailwind (or - headwind)
+  jumpRunGroundSpeedKnots = JUMP_RUN_AIRSPEED_KNOTS + windAlongHeading;
+
+  // Ensure ground speed is positive
+  if (jumpRunGroundSpeedKnots < 0) jumpRunGroundSpeedKnots = 0;
+
+  // Calculate exit separation based on ground speed
+  exitSeparationSeconds = getExitSeparation(jumpRunGroundSpeedKnots);
+}
+
+/* Helper: Get exit separation time based on ground speed */
+function getExitSeparation(groundSpeedKnots) {
+  // Lookup table from user requirements
+  const separationTable = [
+    { groundSpeed: 100, separation: 6 },
+    { groundSpeed: 80, separation: 8 },
+    { groundSpeed: 70, separation: 9 },
+    { groundSpeed: 60, separation: 10 },
+    { groundSpeed: 50, separation: 12 },
+    { groundSpeed: 40, separation: 15 },
+    { groundSpeed: 30, separation: 20 },
+    { groundSpeed: 20, separation: 30 }
+  ];
+
+  // If ground speed is higher than max in table, use min separation
+  if (groundSpeedKnots >= 100) return 6;
+
+  // If ground speed is lower than min in table, use max separation
+  if (groundSpeedKnots <= 20) return 30;
+
+  // Linear interpolation between table values
+  for (let i = 0; i < separationTable.length - 1; i++) {
+    const upper = separationTable[i];
+    const lower = separationTable[i + 1];
+
+    if (groundSpeedKnots <= upper.groundSpeed && groundSpeedKnots >= lower.groundSpeed) {
+      const ratio = (upper.groundSpeed - groundSpeedKnots) / (upper.groundSpeed - lower.groundSpeed);
+      return Math.round(upper.separation + ratio * (lower.separation - upper.separation));
+    }
+  }
+
+  return 10; // Default fallback
 }
 
 /* Helper: a point at signed distance sMiles along the jump run axis */
@@ -570,12 +734,24 @@ L.tileLayer(
   }
 ).addTo(map);
 
-L.marker([DZ_LAT, DZ_LON]).addTo(map).bindPopup(DZ_NAME).openPopup();
+// Custom dropzone marker with pulsing effect
+const dzIcon = L.divIcon({
+  className: "dz-marker-icon",
+  html: '<div class="dz-marker-outer"><div class="dz-marker-inner">🎯</div></div>',
+  iconSize: [40, 40],
+  iconAnchor: [20, 20]
+});
+
+L.marker([DZ_LAT, DZ_LON], { icon: dzIcon })
+  .addTo(map);
 
 let jumpRunGroup = null;
 
 function updateJumpRun() {
   const heading = currentHeadingDeg || 270;
+
+  // Calculate ground speed and exit separation
+  computeGroundSpeedAndSeparation(heading);
 
   const offset = jumpRunOffsetMiles || 0;
   const runMiles = JUMP_RUN_LENGTH_MILES;
@@ -593,10 +769,19 @@ function updateJumpRun() {
     map.removeLayer(jumpRunGroup);
   }
 
+  // Enhanced jump run with glow effect (outer glow + inner line)
+  const glowLine = L.polyline([startLatLng, endLatLng], {
+    weight: 10,
+    color: "#4caf50",
+    opacity: 0.3,
+    className: "jump-run-glow"
+  });
+
   const mainLine = L.polyline([startLatLng, endLatLng], {
     weight: 5,
-    color: "#ffeb3b",
-    opacity: 0.9
+    color: "#76ff03",
+    opacity: 0.95,
+    className: "jump-run-main"
   });
 
   const arrowLenMeters = runMiles * METERS_PER_MILE * 0.12;
@@ -606,20 +791,34 @@ function updateJumpRun() {
   const left = destinationPoint(tipLat, tipLon, heading - 150, arrowLenMeters);
   const right = destinationPoint(tipLat, tipLon, heading + 150, arrowLenMeters);
 
+  const arrowGlowLeft = L.polyline(
+    [[tipLat, tipLon], [left.lat, left.lon]],
+    { weight: 10, color: "#4caf50", opacity: 0.3, className: "jump-run-glow" }
+  );
+  const arrowGlowRight = L.polyline(
+    [[tipLat, tipLon], [right.lat, right.lon]],
+    { weight: 10, color: "#4caf50", opacity: 0.3, className: "jump-run-glow" }
+  );
+
   const arrowLeft = L.polyline(
     [[tipLat, tipLon], [left.lat, left.lon]],
-    { weight: 5, color: "#ffeb3b", opacity: 0.9 }
+    { weight: 5, color: "#76ff03", opacity: 0.95, className: "jump-run-main" }
   );
   const arrowRight = L.polyline(
     [[tipLat, tipLon], [right.lat, right.lon]],
-    { weight: 5, color: "#ffeb3b", opacity: 0.9 }
+    { weight: 5, color: "#76ff03", opacity: 0.95, className: "jump-run-main" }
   );
 
-  jumpRunGroup = L.layerGroup([mainLine, arrowLeft, arrowRight]).addTo(map);
+  jumpRunGroup = L.layerGroup([
+    glowLine, mainLine,
+    arrowGlowLeft, arrowGlowRight,
+    arrowLeft, arrowRight
+  ]).addTo(map);
 
   // Map stays centered on DZ at zoom 15
 
   const summaryEl = document.getElementById("jump-run-summary");
+  const groundSpeedEl = document.getElementById("ground-speed-summary");
   const updatedEl = document.getElementById("jump-run-updated");
 
   if (summaryEl) {
@@ -628,6 +827,12 @@ function updateJumpRun() {
     const sign = offMi >= 0 ? "+" : "";
     const offStr = `${sign}${Math.abs(offMi).toFixed(2)}`;
     summaryEl.textContent = `${headingStr}° @ ${offStr}`;
+  }
+
+  if (groundSpeedEl) {
+    const groundSpeedStr = Math.round(jumpRunGroundSpeedKnots);
+    const separationStr = exitSeparationSeconds;
+    groundSpeedEl.textContent = `${groundSpeedStr} kts • ${separationStr} sec`;
   }
 
   if (updatedEl) {
@@ -647,6 +852,66 @@ let jumpPlaneMarker = null;
 let jumpPlaneTrackLine = null;
 let jumpPlaneTrackCoords = [];
 let otherAircraftMarkers = {};
+let aircraftPositionBuffers = {}; // Store buffer of recent positions for smooth playback
+let playbackDelay = 20000; // 20 second delay for buffered playback (in milliseconds)
+let animationFrameId = null;
+
+// Smooth position playback using buffered positions
+function animateTrafficMarkers() {
+  const now = Date.now();
+  const playbackTime = now - playbackDelay; // Look back in time for delayed playback
+
+  Object.entries(otherAircraftMarkers).forEach(([hex, marker]) => {
+    const buffer = aircraftPositionBuffers[hex];
+    if (!buffer || buffer.length < 2) return;
+
+    // Remove old positions from buffer (older than we need)
+    while (buffer.length > 0 && buffer[0].timestamp < playbackTime - 30000) {
+      buffer.shift();
+    }
+
+    // Find the two positions to interpolate between
+    let beforePos = null;
+    let afterPos = null;
+
+    for (let i = 0; i < buffer.length - 1; i++) {
+      if (buffer[i].timestamp <= playbackTime && buffer[i + 1].timestamp >= playbackTime) {
+        beforePos = buffer[i];
+        afterPos = buffer[i + 1];
+        break;
+      }
+    }
+
+    // If we don't have bracketing positions, use the closest one
+    if (!beforePos || !afterPos) {
+      if (buffer.length > 0) {
+        const closestPos = buffer[buffer.length - 1];
+        marker.setLatLng([closestPos.lat, closestPos.lng]);
+      }
+      return;
+    }
+
+    // Interpolate between the two positions
+    const timeDiff = afterPos.timestamp - beforePos.timestamp;
+    const timeProgress = playbackTime - beforePos.timestamp;
+    const ratio = timeDiff > 0 ? timeProgress / timeDiff : 0;
+
+    const interpolatedLat = beforePos.lat + (afterPos.lat - beforePos.lat) * ratio;
+    const interpolatedLng = beforePos.lng + (afterPos.lng - beforePos.lng) * ratio;
+
+    marker.setLatLng([interpolatedLat, interpolatedLng]);
+  });
+
+  // Always continue animating
+  animationFrameId = requestAnimationFrame(animateTrafficMarkers);
+}
+
+// Start animation loop if not already running
+function startTrafficAnimation() {
+  if (!animationFrameId) {
+    animationFrameId = requestAnimationFrame(animateTrafficMarkers);
+  }
+}
 
 function clearJumpPlaneHighlight() {
   if (jumpPlaneMarker) {
@@ -672,22 +937,35 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
     jumpPlaneTrackCoords.shift();
   }
 
+  const rotation = trackDeg || 0;
+
   if (!jumpPlaneMarker) {
     const icon = L.divIcon({
       className: "aircraft-icon",
-      html: "✈️",
+      html: `<div class="aircraft-icon-inner" style="transform: rotate(${rotation}deg);">✈️</div>`,
       iconSize: [24, 24],
       iconAnchor: [12, 12]
     });
     jumpPlaneMarker = L.marker(latLng, { icon }).addTo(map);
   } else {
     jumpPlaneMarker.setLatLng(latLng);
+    // Update rotation
+    const iconElement = jumpPlaneMarker.getElement();
+    if (iconElement) {
+      const innerDiv = iconElement.querySelector('.aircraft-icon-inner');
+      if (innerDiv) {
+        innerDiv.style.transform = `rotate(${rotation}deg)`;
+      }
+    }
   }
 
   if (!jumpPlaneTrackLine) {
     jumpPlaneTrackLine = L.polyline(jumpPlaneTrackCoords, {
-      weight: 2,
-      dashArray: "4 4"
+      weight: 3,
+      color: "#9c27b0",
+      opacity: 0.7,
+      dashArray: "8 4",
+      className: "jump-plane-trail"
     }).addTo(map);
   } else {
     jumpPlaneTrackLine.setLatLngs(jumpPlaneTrackCoords);
@@ -715,6 +993,17 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
   }
 }
 
+// Helper: Get color based on altitude
+function getAltitudeColor(altFt) {
+  if (altFt >= 10000) {
+    return { fill: "#ff5252", stroke: "#d32f2f" }; // Red - High altitude (jump traffic)
+  } else if (altFt >= 5000) {
+    return { fill: "#ffa726", stroke: "#f57c00" }; // Orange - Medium altitude
+  } else {
+    return { fill: "#66bb6a", stroke: "#388e3c" }; // Green - Low altitude
+  }
+}
+
 // Brighter dots + tooltip for all traffic
 function updateAllTrafficMarkers(planes, excludeHex) {
   const seenHex = new Set();
@@ -733,6 +1022,9 @@ function updateAllTrafficMarkers(planes, excludeHex) {
     const apiReg = a.r || a.registration || hex.toUpperCase();
     const alt = Math.round(a.alt_geom ?? a.alt_baro ?? 0);
     const gs  = a.gs != null ? Math.round(a.gs) : null;
+    const track = a.track != null ? a.track : (a.heading != null ? a.heading : null);
+
+    const colors = getAltitudeColor(alt);
 
     let tooltipText = `${apiReg}\n${alt} ft`;
     if (gs !== null) {
@@ -741,7 +1033,22 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
     if (otherAircraftMarkers[hex]) {
       const marker = otherAircraftMarkers[hex];
-      marker.setLatLng([lat, lon]);
+
+      // Add position to buffer for smooth playback
+      if (!aircraftPositionBuffers[hex]) {
+        aircraftPositionBuffers[hex] = [];
+      }
+      aircraftPositionBuffers[hex].push({
+        lat,
+        lng: lon,
+        timestamp: Date.now()
+      });
+
+      // Update colors based on current altitude
+      marker.setStyle({
+        color: colors.stroke,
+        fillColor: colors.fill
+      });
 
       if (marker.setTooltipContent) {
         marker.setTooltipContent(tooltipText);
@@ -753,11 +1060,12 @@ function updateAllTrafficMarkers(planes, excludeHex) {
       }
     } else {
       const marker = L.circleMarker([lat, lon], {
-        radius: 6,
-        weight: 1.5,
-        color: "#000000",
-        fillColor: "#00ffff",
-        fillOpacity: 0.9
+        radius: 7,
+        weight: 2,
+        color: colors.stroke,
+        fillColor: colors.fill,
+        fillOpacity: 0.85,
+        className: "traffic-marker"
       });
 
       marker.bindTooltip(tooltipText, {
@@ -767,15 +1075,27 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
       marker.addTo(map);
       otherAircraftMarkers[hex] = marker;
+
+      // Initialize position buffer
+      aircraftPositionBuffers[hex] = [{
+        lat,
+        lng: lon,
+        timestamp: Date.now()
+      }];
     }
   });
 
+  // Clean up markers that are no longer present
   Object.entries(otherAircraftMarkers).forEach(([hex, marker]) => {
     if (!seenHex.has(hex)) {
       map.removeLayer(marker);
       delete otherAircraftMarkers[hex];
+      delete aircraftPositionBuffers[hex];
     }
   });
+
+  // Start smooth animation
+  startTrafficAnimation();
 }
 
 async function fetchAircraftPosition() {

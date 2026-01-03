@@ -181,7 +181,7 @@ thead {
 }
 
 th {
-  padding: 6px 8px;
+  padding: 5px 8px;
   text-align: right;
   font-weight: 600;
   font-size: 0.75rem;
@@ -190,7 +190,7 @@ th {
 }
 
 td {
-  padding: 6px 8px;
+  padding: 4px 8px;
   text-align: right;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -256,7 +256,18 @@ tbody tr.altitude-highlight {
   font-size: 20px;
   line-height: 20px;
   text-align: center;
-  text-shadow: 0 0 2px #000;
+  background: transparent !important;
+  border: none !important;
+}
+
+.aircraft-icon-inner {
+  font-size: 24px;
+  line-height: 24px;
+  text-shadow: 0 0 6px rgba(156, 39, 176, 1),
+               0 2px 4px rgba(0, 0, 0, 0.8);
+  filter: drop-shadow(0 0 4px rgba(156, 39, 176, 0.8));
+  transition: transform 2s linear;
+  display: inline-block;
 }
 
 /* ================================
@@ -373,13 +384,121 @@ tbody tr.altitude-highlight {
   flex: 1;
 }
 
-/* ================================
-   RESPONSIVE
-=================================== */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
+/* Smooth aircraft position transitions */
+.leaflet-marker-icon.aircraft-icon {
+  transition: transform 2s linear;
+}
+
+/* Traffic dots use JavaScript interpolation for smooth movement */
+
+/* Enhanced jump run styling */
+.jump-run-glow {
+  filter: blur(2px);
+}
+
+.jump-run-main {
+  filter: drop-shadow(0 0 4px rgba(118, 255, 3, 0.8));
+}
+
+/* Custom Dropzone Marker */
+.dz-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.dz-marker-outer {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dz-marker-outer::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(244, 67, 54, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: dzPulse 2s ease-out infinite;
+}
+
+.dz-marker-inner {
+  font-size: 28px;
+  line-height: 28px;
+  text-shadow: 0 0 8px rgba(244, 67, 54, 0.8),
+               0 2px 4px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 0 4px rgba(244, 67, 54, 1));
+  z-index: 1;
+}
+
+@keyframes dzPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
   }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+}
+
+/* Traffic markers with subtle glow */
+.traffic-marker {
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+}
+
+/* Enhanced jump plane trail */
+.jump-plane-trail {
+  filter: drop-shadow(0 0 3px rgba(156, 39, 176, 0.8));
+}
+
+/* ================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+=================================== */
+
+/* Very small phones (320px - 480px) */
+@media (max-width: 480px) {
+  /* Reduce all padding/spacing */
+  .sidebar-content { padding: 12px; }
+  .card { padding: 8px; margin-bottom: 8px; }
+
+  /* Scale down typography */
+  .sidebar-header h1 { font-size: 1.1rem; }
+  .sidebar-header p { font-size: 0.75rem; }
+  .jump-run-main { font-size: 1.4rem; }
+  .jump-run-label { font-size: 0.7rem; }
+
+  /* Optimize sidebar height */
+  #sidebar { max-height: 40vh; }
+  #map { min-height: 60vh; }
+
+  /* Table optimizations */
+  table { font-size: 0.75rem; }
+  td { padding: 3px 6px; }
+}
+
+/* Small phones and phablets (481px - 640px) */
+@media (max-width: 640px) {
+  .sidebar-content { padding: 14px; }
+  .card { padding: 10px; margin-bottom: 10px; }
+
+  .sidebar-header h1 { font-size: 1.2rem; }
+  .jump-run-main { font-size: 1.6rem; }
+
+  #sidebar { max-height: 45vh; }
+  #map { min-height: 55vh; }
+}
+
+/* Tablets and large phones (641px - 768px) */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
 
   #sidebar {
     width: 100% !important;
@@ -404,3 +523,42 @@ tbody tr.altitude-highlight {
   }
 }
 
+/* Landscape mobile devices */
+@media (max-width: 768px) and (orientation: landscape) {
+  #sidebar {
+    max-height: 40vh;  /* Reduce sidebar in landscape */
+  }
+
+  #map {
+    min-height: 60vh;  /* More space for map */
+  }
+
+  /* Make cards more compact in landscape */
+  .card { padding: 8px; margin-bottom: 8px; }
+  .sidebar-content { padding: 12px; }
+}
+
+/* Small tablets and large phones landscape (769px - 1024px) */
+@media (max-width: 1024px) {
+  #sidebar {
+    width: 300px;  /* Slightly narrower sidebar */
+  }
+
+  /* Slightly reduce padding on medium screens */
+  .sidebar-content { padding: 14px; }
+  .card { padding: 11px; }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  #sidebar {
+    width: 340px;  /* Full sidebar width */
+  }
+}
+
+/* Table overflow protection for very narrow screens */
+@media (max-width: 375px) {
+  table {
+    min-width: 280px;  /* Prevent table from becoming too cramped */
+  }
+}
