@@ -501,13 +501,25 @@ tbody tr.altitude-highlight {
   body { flex-direction: column; }
 
   #sidebar {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100%;
     max-height: 50vh;
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
   #map {
     flex: 1;
     min-height: 50vh;
+  }
+
+  .sidebar-header {
+    border-radius: 0;
+  }
+
+  .card {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
