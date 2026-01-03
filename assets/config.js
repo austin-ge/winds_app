@@ -60,6 +60,6 @@ const CANOPY_FORWARD_SPEED_MPH = 25;
 // Adjust based on your aircraft type and DZ procedures
 const JUMP_RUN_LENGTH_MILES = 0.8;      // total ground length of jump run
 const JUMP_RUN_AIRSPEED_KNOTS = 90;     // target airspeed during jump run
-const AIRPLANE_DRIFT_MILES   = 0.12;    // aircraft drift during climb to altitude
+const AIRPLANE_DRIFT_MILES   = 0.00;    // aircraft drift during climb to altitude (removed - not relevant to jump run calculation)
 const LIGHT_TO_DOOR_MILES    = 0.10;    // distance from green light to door
 const METERS_PER_MILE        = 1609.34; // conversion constant

@@ -397,7 +397,7 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
             const windDirTo = (wind.dirDeg + 180) % 360;
             const windSpeedMph = wind.speedKt * knotsToMph;
             const driftDistanceMiles = windSpeedMph * timeInLayerHours;
-            
+
             const theta = windDirTo * Math.PI / 180;
             dx = Math.sin(theta) * driftDistanceMiles;
             dy = Math.cos(theta) * driftDistanceMiles;
@@ -424,7 +424,7 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
             const windDirTo = (wind.dirDeg + 180) % 360;
             const windSpeedMph = wind.speedKt * knotsToMph;
             const driftDistanceMiles = windSpeedMph * timeInLayerHours;
-            
+
             const theta = windDirTo * Math.PI / 180;
             dx += Math.sin(theta) * driftDistanceMiles;
             dy += Math.cos(theta) * driftDistanceMiles;
@@ -442,10 +442,14 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     const headingUx = Math.sin(H_rad);
     const headingUy = Math.cos(H_rad);
     const canopyDriftAlongHeading = canopyPassiveDrift.dx * headingUx + canopyPassiveDrift.dy * headingUy;
-    
+
     const flyableDistMiles = CANOPY_FORWARD_SPEED_MPH * timeUnderCanopyHours;
 
-    const openingPointOffsetMiles = -(flyableDistMiles + canopyDriftAlongHeading);
+    // Adjust flight direction based on wind:
+    // - Tailwind (positive drift): open upwind, fly downwind to DZ
+    // - Headwind (negative drift): open downwind, fly upwind to DZ
+    const flightDirection = Math.sign(canopyDriftAlongHeading || 1);
+    const openingPointOffsetMiles = -(canopyDriftAlongHeading + flightDirection * flyableDistMiles);
     
     // 3. Calculate freefall drift
     const freefallDrift = calculateDriftVector(EXIT_ALTITUDE_FT, OPENING_ALTITUDE_FT, FREEFALL_TERMINAL_VELOCITY_MPH);
