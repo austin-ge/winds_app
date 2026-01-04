@@ -445,11 +445,10 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
 
     const flyableDistMiles = CANOPY_FORWARD_SPEED_MPH * timeUnderCanopyHours;
 
-    // Adjust flight direction based on wind:
-    // - Tailwind (positive drift): open upwind, fly downwind to DZ
-    // - Headwind (negative drift): open downwind, fly upwind to DZ
-    const flightDirection = Math.sign(canopyDriftAlongHeading || 1);
-    const openingPointOffsetMiles = -(canopyDriftAlongHeading + flightDirection * flyableDistMiles);
+    // Calculate opening point: compensate for drift, reduced by ability to fly into wind
+    // Negative offset = upwind of DZ, Positive offset = downwind of DZ
+    // Canopy can fly into wind to reduce the needed offset
+    const openingPointOffsetMiles = -(canopyDriftAlongHeading - flyableDistMiles);
     
     // 3. Calculate freefall drift
     const freefallDrift = calculateDriftVector(EXIT_ALTITUDE_FT, OPENING_ALTITUDE_FT, FREEFALL_TERMINAL_VELOCITY_MPH);
