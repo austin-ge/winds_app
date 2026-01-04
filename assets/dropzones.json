@@ -1,0 +1,826 @@
+{
+    "Dropzones": [
+      {
+        "26MA": {
+          "lat": 42.69861944,
+          "lon": -71.5500556,
+          "Dropzone": "Pepperell Skydiving Center"
+        },
+        "ME64": {
+          "lat": 43.3750814,
+          "lon": -70.9292286,
+          "Dropzone": "Skydive New England"
+        },
+        "ORE": {
+          "lat": 42.5701264,
+          "lon": -72.2886103,
+          "Dropzone": "Jumptown/MSPC"
+        },
+        "FSO": {
+          "lat": 44.9402808,
+          "lon": -73.09746,
+          "Dropzone": "Malone Parachute Club"
+        },
+        "2B7": {
+          "lat": 44.7685278,
+          "lon": -69.3744167,
+          "Dropzone": "Vacationland Skydiving"
+        },
+        "VT11": {
+          "lat": 44.0686667,
+          "lon": -73.3734444,
+          "Dropzone": "Vermont Skydiving Adventures Inc"
+        },
+        "D82": {
+          "lat": 42.6547928,
+          "lon": -76.7963428,
+          "Dropzone": "Skydive Finger Lakes"
+        },
+        "85N": {
+          "lat": 43.2667228,
+          "lon": -78.7678136,
+          "Dropzone": "Frontier Skydivers"
+        },
+        "N71": {
+          "lat": 40.0922067,
+          "lon": -76.5743553,
+          "Dropzone": "Maytown Sport Parachute Club"
+        },
+        "17N": {
+          "lat": 39.7054758,
+          "lon": -75.0330031,
+          "Dropzone": "Skydive Cross Keys"
+        },
+        "HZL": {
+          "lat": 40.9867778,
+          "lon": -75.9948889,
+          "Dropzone": "Above The Poconos Skydivers / NEPA Ripcords"
+        },
+        "SFQ": {
+          "lat": 36.6823536,
+          "lon": -76.6018733,
+          "Dropzone": "Skydive Suffolk"
+        },
+        "DCM": {
+          "lat": 34.7893333,
+          "lon": -81.1957778,
+          "Dropzone": "Skydive Carolina!"
+        },
+        "INJ": {
+          "lat": 32.0836389,
+          "lon": -97.09725,
+          "Dropzone": "Skydive 35"
+        },
+        "X51": {
+          "lat": 25.4992303,
+          "lon": -80.5542449,
+          "Dropzone": "Skydive Miami"
+        },
+        "WI14": {
+          "lat": 44.9666322,
+          "lon": -92.3876911,
+          "Dropzone": "Skydive Twin Cities"
+        },
+        "73TA": {
+          "lat": 30.9207397,
+          "lon": -97.5397311,
+          "Dropzone": "Skydive Temple"
+        },
+        "UUU": {
+          "lat": 41.5324397,
+          "lon": -71.2815439,
+          "Dropzone": "Skydive Newport"
+        },
+        "FYJ": {
+          "lat": 37.5213333,
+          "lon": -76.76275,
+          "Dropzone": "No Limits Skydiving - West Point"
+        },
+        "PTB": {
+          "lat": 37.18375,
+          "lon": -77.5073889,
+          "Dropzone": "Virginia Skydiving Center LLC"
+        },
+        "7FA1": {
+          "lat": 24.6487544,
+          "lon": -81.5798083,
+          "Dropzone": "Skydive Key West"
+        },
+        "AFT": {
+          "lat": 35.0606667,
+          "lon": -85.5853056,
+          "Dropzone": "Chattanooga Skydiving Company"
+        },
+        "OKB": {
+          "lat": 33.2179764,
+          "lon": -117.3515075,
+          "Dropzone": "GoJump Oceanside"
+        },
+        "BLH": {
+          "lat": 33.620833,
+          "lon": -114.716944,
+          "Dropzone": "Military Freefall Solutions Inc."
+        },
+        "OAR": {
+          "lat": 36.6815278,
+          "lon": -121.7616667,
+          "Dropzone": "Skydive Monterey Bay"
+        },
+        "31E": {
+          "lat": 39.6650833,
+          "lon": -74.3075556,
+          "Dropzone": "Skydive East Coast"
+        },
+        "HWV": {
+          "lat": 40.821944,
+          "lon": -72.866917,
+          "Dropzone": "Long Island Skydiving Center"
+        },
+        "S10": {
+          "lat": 47.86264,
+          "lon": 119.945814,
+          "Dropzone": "Skydive Chelan"
+        },
+        "7D8": {
+          "lat": 41.3511658,
+          "lon": -81.0995414,
+          "Dropzone": "Cleveland Skydiving Center"
+        },
+        "4WI0": {
+          "lat": 44.933514,
+          "lon": -91.273127,
+          "Dropzone": "Skydive Wissota / Indianhead SPC"
+        },
+        "7B9": {
+          "lat": 41.9254167,
+          "lon": -72.4571111,
+          "Dropzone": "Connecticut Parachutists"
+        },
+        "5NY5": {
+          "lat": 41.674253,
+          "lon": -74.150233,
+          "Dropzone": "Skydive The Ranch"
+        },
+        "01G": {
+          "lat": 42.739044,
+          "lon": -78.0522136,
+          "Dropzone": "Rochester Skydivers"
+        },
+        "KOMH": {
+          "lat": 38.247222,
+          "lon": -78.045556,
+          "Dropzone": "Skydive Orange"
+        },
+        "OPN": {
+          "lat": 32.9550026,
+          "lon": -84.2640862,
+          "Dropzone": "Skydive Atlanta"
+        },
+        "4A4": {
+          "lat": 34.0186944,
+          "lon": -85.1464722,
+          "Dropzone": "Skydive The Farm"
+        },
+        "61C": {
+          "lat": 42.9632028,
+          "lon": -88.8176281,
+          "Dropzone": "Wisconsin Skydiving Center"
+        },
+        "TVY": {
+          "lat": 40.612556,
+          "lon": -112.3507778,
+          "Dropzone": "Skydive Utah"
+        },
+        "TE88": {
+          "lat": 29.3569417,
+          "lon": -95.4594028,
+          "Dropzone": "Skydive Spaceland-Houston"
+        },
+        "TAZ": {
+          "lat": 39.537115,
+          "lon": -89.326081,
+          "Dropzone": "Mid-America Sport Parachute Club"
+        },
+        "K78": {
+          "lat": 38.9040558,
+          "lon": -97.2658539,
+          "Dropzone": "Kansas State University Parachute Club"
+        },
+        "0L7": {
+          "lat": 35.77194,
+          "lon": -115.32982,
+          "Dropzone": "Sin City Skydiving"
+        },
+        "L17": {
+          "lat": 35.1417222,
+          "lon": -119.4382222,
+          "Dropzone": "Skydive Taft"
+        },
+        "EUL": {
+          "lat": 43.6418611,
+          "lon": -116.6357778,
+          "Dropzone": "Sky Down Skydiving"
+        },
+        "C89": {
+          "lat": 42.70325,
+          "lon": -89.9589722,
+          "Dropzone": "Skydive Midwest"
+        },
+        "CKZ": {
+          "lat": 40.3891864,
+          "lon": -75.2904814,
+          "Dropzone": "Above It All Skydiving School / Skydive Philadelphia"
+        },
+        "PAQ": {
+          "lat": 61.595,
+          "lon": -149.0886,
+          "Dropzone": "Alaska Skydive Center"
+        },
+        "LKPJ": {
+          "lat": 49.445213,
+          "lon": 17.130653,
+          "Dropzone": "Dropzone Prostejov"
+        },
+        "THA": {
+          "lat": 35.3800163,
+          "lon": -86.2466896,
+          "Dropzone": "Skydive Tennessee"
+        },
+        "0W3": {
+          "lat": 39.5668378,
+          "lon": -76.2024028,
+          "Dropzone": "Skydive Baltimore"
+        },
+        "GLY": {
+          "lat": 38.3651,
+          "lon": 93.7,
+          "Dropzone": "GliderSports Skydiving"
+        },
+        "DED": {
+          "lat": 29.0670278,
+          "lon": -81.28375,
+          "Dropzone": "Skydive DeLand"
+        },
+        "X26": {
+          "lat": 27.8132347,
+          "lon": -80.4955841,
+          "Dropzone": "Skydive Sebastian"
+        },
+        "2IS": {
+          "lat": 26.7351806,
+          "lon": -81.0510542,
+          "Dropzone": "Skydive Spaceland-Clewiston"
+        },
+        "OH29": {
+          "lat": 40.9006164,
+          "lon": -80.5553478,
+          "Dropzone": "Alliance Sport Parachute Club / Skydive Ricks"
+        },
+        "2D1": {
+          "lat": 40.97406,
+          "lon": -81.100708,
+          "Dropzone": "Canton Air Sports"
+        },
+        "3NP": {
+          "lat": 42.17,
+          "lon": -84.26,
+          "Dropzone": "Skydive Tecumseh"
+        },
+        "3Y3": {
+          "lat": 41.3631833,
+          "lon": -94.0210611,
+          "Dropzone": "Des Moines Skydivers"
+        },
+        "57C": {
+          "lat": 42.7971667,
+          "lon": -88.3726111,
+          "Dropzone": "Skydive Milwaukee/Sky Knights Sport Parachute Club"
+        },
+        "WI97": {
+          "lat": 43.25777,
+          "lon": -89.0648322,
+          "Dropzone": "Seven Hills Skydivers of Madison WI"
+        },
+        "LYV": {
+          "lat": 43.6168889,
+          "lon": -96.2177236,
+          "Dropzone": "Skydive Adventures"
+        },
+        "D54": {
+          "lat": 46.900554,
+          "lon": -96.91658,
+          "Dropzone": "Skydive Fargo! Inc"
+        },
+        "8N2": {
+          "lat": 41.3997778,
+          "lon": -88.7939167,
+          "Dropzone": "Skydive Chicago"
+        },
+        "81IL": {
+          "lat": 40.4339062,
+          "lon": -89.3561217,
+          "Dropzone": "Illinois Valley Parachute Club"
+        },
+        "CMD": {
+          "lat": 34.2686944,
+          "lon": -86.8580278,
+          "Dropzone": "Skydive Alabama"
+        },
+        "5W4": {
+          "lat": 35.018664,
+          "lon": -79.189197,
+          "Dropzone": "Skydive Paraclete XP"
+        },
+        "skydive california": {
+          "lat": 37.731247,
+          "lon": -121.335233,
+          "Dropzone": "Skydive California"
+        },
+        "NE69": {
+          "lat": 40.8675006,
+          "lon": -96.11001,
+          "Dropzone": "Lincoln Sport Parachute Club"
+        },
+        "XS90": {
+          "lat": 29.7682803,
+          "lon": -97.7752789,
+          "Dropzone": "Skydive Spaceland-San Marcos"
+        },
+        "BVU": {
+          "lat": 35.949427,
+          "lon": -114.857854,
+          "Dropzone": "Skydive Las Vegas"
+        },
+        "0CL3": {
+          "lat": 32.6331119,
+          "lon": -116.8930781,
+          "Dropzone": "Skydive San Diego"
+        },
+        "L65": {
+          "lat": 33.7646389,
+          "lon": -117.219,
+          "Dropzone": "Skydive Perris"
+        },
+        "OL05": {
+          "lat": 45.1462331,
+          "lon": -122.6175886,
+          "Dropzone": "Skydive Oregon Inc"
+        },
+        "77S": {
+          "lat": 43.93075,
+          "lon": -123.0066667,
+          "Dropzone": "Eugene Skydivers"
+        },
+        "F13": {
+          "lat": 26.9686111,
+          "lon": -81.9163056,
+          "Dropzone": "Skydive SW Florida Club"
+        },
+        "2F6": {
+          "lat": 36.3551056,
+          "lon": -96.0109556,
+          "Dropzone": "Skydive Airtight"
+        },
+        "67L": {
+          "lat": 36.8331389,
+          "lon": -114.0558889,
+          "Dropzone": "Skydive Mesquite"
+        },
+        "CNY": {
+          "lat": 38.7549561,
+          "lon": -109.7548439,
+          "Dropzone": "Skydive Moab"
+        },
+        "3GM": {
+          "lat": 43.0358,
+          "lon": -86.11926,
+          "Dropzone": "Skydive Grand Haven"
+        },
+        "4S9": {
+          "lat": 45.216325,
+          "lon": -122.590084,
+          "Dropzone": "Pacific Northwest Skydiving Center"
+        },
+        "HEG": {
+          "lat": 30.28,
+          "lon": -81.81,
+          "Dropzone": "World Skydiving Center"
+        },
+        "GGP": {
+          "lat": 40.711253,
+          "lon": -86.374011,
+          "Dropzone": "Air Indiana Skydiving Center LLC"
+        },
+        "65G": {
+          "lat": 42.7172556,
+          "lon": -84.0624597,
+          "Dropzone": "Capital City Skydiving"
+        },
+        "CUH": {
+          "lat": 35.950028,
+          "lon": -96.773417,
+          "Dropzone": "Oklahoma Skydiving Center"
+        },
+        "06MO": {
+          "lat": 39.231256,
+          "lon": -94.800752,
+          "Dropzone": "Falcon Skydiving"
+        },
+        "Private": {
+          "lat": 33.976111,
+          "lon": -85.174167,
+          "Dropzone": "Skydive Spaceland-Atlanta"
+        },
+        "0M5": {
+          "lat": 36.1118592,
+          "lon": -87.7415797,
+          "Dropzone": "Music City Skydiving"
+        },
+        "GCY": {
+          "lat": 36.1960129,
+          "lon": -82.8109908,
+          "Dropzone": "Jump TN"
+        },
+        "N92": {
+          "lat": 35.5743003,
+          "lon": -81.1173011,
+          "Dropzone": "Skydive Central North Carolina"
+        },
+        "U14": {
+          "lat": 39.7365833,
+          "lon": -111.8700556,
+          "Dropzone": "Skydive the Wasatch"
+        },
+        "UPP": {
+          "lat": 20.2651944,
+          "lon": -155.8599444,
+          "Dropzone": "Big Island Gravity"
+        },
+        "JYL": {
+          "lat": 32.649714,
+          "lon": -81.592373,
+          "Dropzone": "Jump Georgia Skydiving"
+        },
+        "RPJ": {
+          "lat": 41.8930014,
+          "lon": -89.07829,
+          "Dropzone": "Chicagoland Skydiving Center"
+        },
+        "HDH": {
+          "lat": 21.5794736,
+          "lon": -158.1972814,
+          "Dropzone": "Pacific Skydiving Center"
+        },
+        "CA89": {
+          "lat": 33.6300225,
+          "lon": -117.3017044,
+          "Dropzone": "Skydive Elsinore"
+        },
+        "OXB": {
+          "lat": 38.3104444,
+          "lon": -75.1239722,
+          "Dropzone": "Skydive Ocean City"
+        },
+        "E60": {
+          "lat": 32.80405,
+          "lon": -111.58194,
+          "Dropzone": "Skydive Arizona"
+        },
+        "LPC": {
+          "lat": 34.6656194,
+          "lon": -120.4675028,
+          "Dropzone": "Skydive Santa Barbara"
+        },
+        "DWA": {
+          "lat": 38.5793889,
+          "lon": -121.8569444,
+          "Dropzone": "SkyDance SkyDiving"
+        },
+        "SHN": {
+          "lat": 47.233556,
+          "lon": -123.147556,
+          "Dropzone": "Kapowsin Air Sports"
+        },
+        "N53": {
+          "lat": 41.0358717,
+          "lon": -75.1606789,
+          "Dropzone": "Skys The Limit"
+        },
+        "MEB": {
+          "lat": 34.7919484,
+          "lon": -79.3658354,
+          "Dropzone": "Laurinburg-Maxton"
+        },
+        "CIR": {
+          "lat": 37.062375,
+          "lon": -89.221153,
+          "Dropzone": "SEMO Skydiving"
+        },
+        "LZD": {
+          "lat": 41.8197406,
+          "lon": -71.9009631,
+          "Dropzone": "Skydive Danielson"
+        },
+        "SDM": {
+          "lat": 35.949453,
+          "lon": -116.993182,
+          "Dropzone": "Pacific Coast Skydiving"
+        },
+        "KTBR": {
+          "lat": 32.48275,
+          "lon": -81.7369444,
+          "Dropzone": "The Jumping Place"
+        },
+        "GCN": {
+          "lat": 35.952361,
+          "lon": -112.13638,
+          "Dropzone": "Paragon Skydive-The Grand Canyon"
+        },
+        "29D": {
+          "lat": 41.1460278,
+          "lon": -80.16775,
+          "Dropzone": "Skydive Pennsylvania"
+        },
+        "35D": {
+          "lat": 42.5304676,
+          "lon": -85.8237484,
+          "Dropzone": "Skydive Allegan"
+        },
+        "TMB": {
+          "lat": 25.64756371,
+          "lon": -80.4332246,
+          "Dropzone": "Miami Skydiving Center"
+        },
+        "W31": {
+          "lat": 36.959115,
+          "lon": -78.180724,
+          "Dropzone": "No Limits Skydiving - Victoria"
+        },
+        "CMA": {
+          "lat": 34.21375,
+          "lon": -119.0943611,
+          "Dropzone": "Skydive Coastal California"
+        },
+        "LHZ": {
+          "lat": 36.0233611,
+          "lon": -78.33025,
+          "Dropzone": "Triangle Skydiving Center"
+        },
+        "PHK": {
+          "lat": 26.7850278,
+          "lon": -80.6933611,
+          "Dropzone": "Skydive Palm Beach"
+        },
+        "SUW": {
+          "lat": 46.68113,
+          "lon": -92.09778,
+          "Dropzone": "Skydive Duluth"
+        },
+        "BNG": {
+          "lat": 33.92264,
+          "lon": -116.858352,
+          "Dropzone": "Skydive West Coast"
+        },
+        "DVO": {
+          "lat": 38.141705,
+          "lon": -122.558082,
+          "Dropzone": "Skydive Golden Gate"
+        },
+        "PHH": {
+          "lat": 33.4517,
+          "lon": -79.526177,
+          "Dropzone": "SC Skydiving"
+        },
+        "M17": {
+          "lat": 37.598211,
+          "lon": -93.349496,
+          "Dropzone": "Flight Providers LLC"
+        },
+        "U08": {
+          "lat": 36.561483,
+          "lon": -114.4406,
+          "Dropzone": "Skydive Fyrosity"
+        },
+        "E80": {
+          "lat": 34.6451978,
+          "lon": -106.8336958,
+          "Dropzone": "Skydive New Mexico"
+        },
+        "CVH": {
+          "lat": 36.8933453,
+          "lon": -121.4102706,
+          "Dropzone": "Skydive Hollister"
+        },
+        "48TX": {
+          "lat": 33.4542758,
+          "lon": -96.3816494,
+          "Dropzone": "Skydive Spaceland-Dallas"
+        },
+        "3FK": {
+          "lat": 39.4264389,
+          "lon": -86.0583219,
+          "Dropzone": "Jerrys Skydiving Circus"
+        },
+        "D73": {
+          "lat": 33.7825217,
+          "lon": -83.6927992,
+          "Dropzone": "Skydive Monroe"
+        },
+        "ZPH": {
+          "lat": 28.2281357,
+          "lon": -82.155925,
+          "Dropzone": "Skydive City Zephyrhills"
+        },
+        "P08": {
+          "lat": 32.9359444,
+          "lon": -111.4265278,
+          "Dropzone": "Complete Parachute Solutions Tactical Training Facility"
+        },
+        "CGZ": {
+          "lat": 32.9548889,
+          "lon": -111.7668333,
+          "Dropzone": "Phoenix Skydive Center"
+        },
+        "MWO": {
+          "lat": 39.5318056,
+          "lon": -84.396444,
+          "Dropzone": "Start Skydiving"
+        },
+        "B19": {
+          "lat": 43.463909,
+          "lon": -70.472895,
+          "Dropzone": "Skydive Coastal Maine"
+        },
+        "F41": {
+          "lat": 32.328213,
+          "lon": -96.667019,
+          "Dropzone": "Dallas Tandem Skydiving"
+        },
+        "8W2": {
+          "lat": 38.6558,
+          "lon": -78.7091,
+          "Dropzone": "Skydive Shenandoah"
+        },
+        "AL08": {
+          "lat": 30.426201,
+          "lon": -87.536697,
+          "Dropzone": "Skydive The Gulf"
+        },
+        "40I": {
+          "lat": 39.5053378,
+          "lon": -84.1218792,
+          "Dropzone": "Skydive Cincinnati"
+        },
+        "FKR": {
+          "lat": 40.2734308,
+          "lon": -86.5621703,
+          "Dropzone": "Skydive Indianapolis"
+        },
+        "SUT": {
+          "lat": 33.9308056,
+          "lon": -78.0733611,
+          "Dropzone": "Skydive Coastal Carolinas"
+        },
+        "TDO": {
+          "lat": 46.4771675,
+          "lon": -122.8064789,
+          "Dropzone": "Skydive Toledo"
+        },
+        "28J": {
+          "lat": 29.6583825,
+          "lon": -81.6895031,
+          "Dropzone": "Skydive Palatka"
+        },
+        "EKX": {
+          "lat": 37.686,
+          "lon": -85.9250278,
+          "Dropzone": "Skydive Kentucky"
+        },
+        "LHM": {
+          "lat": 38.9091667,
+          "lon": -121.3513333,
+          "Dropzone": "Skydive Sacramento"
+        },
+        "O60": {
+          "lat": 38.7759715,
+          "lon": -122.9924166,
+          "Dropzone": "NorCal Skydiving"
+        },
+        "86TN": {
+          "lat": 36.0125,
+          "lon": -83.5465,
+          "Dropzone": "Skydive East Tennessee"
+        },
+        "FYV": {
+          "lat": 36.0050804,
+          "lon": -94.1699268,
+          "Dropzone": "Skydive Fayetteville"
+        },
+        "BXK": {
+          "lat": 33.4204,
+          "lon": -112.6862,
+          "Dropzone": "Skydive Buckeye"
+        },
+        "MPI": {
+          "lat": 37.5108611,
+          "lon": -120.0395278,
+          "Dropzone": "Skydive Yosemite"
+        },
+        "OGD": {
+          "lat": 41.1956658,
+          "lon": -112.0129368,
+          "Dropzone": "Ogden Skydiving Center"
+        },
+        "LMO": {
+          "lat": 40.1642958,
+          "lon": -105.1637319,
+          "Dropzone": "Mile-Hi Skydiving Center Inc."
+        },
+        "X21": {
+          "lat": 28.620553,
+          "lon": -80.832192,
+          "Dropzone": "Skydive Space Center"
+        },
+        "ID92": {
+          "lat": 43.7287733,
+          "lon": -116.5229092,
+          "Dropzone": "DZONE Skydiving-Boise"
+        },
+        "I41": {
+          "lat": 38.4570289,
+          "lon": -82.31376,
+          "Dropzone": "West Virginia Skydivers Inc"
+        },
+        "WVI": {
+          "lat": 36.9357222,
+          "lon": -121.7896389,
+          "Dropzone": "GoJump Santa Cruz LLC"
+        },
+        "9FD2": {
+          "lat": 28.1369589,
+          "lon": -82.1464739,
+          "Dropzone": "Jump Florida Skydiving"
+        },
+        "FHB": {
+          "lat": 30.6119,
+          "lon": -81.4611,
+          "Dropzone": "Skydive Amelia Island"
+        },
+        "MQI": {
+          "lat": 35.9189827,
+          "lon": -75.6955357,
+          "Dropzone": "Skydive OBX"
+        },
+        "AZ43": {
+          "lat": 33.0638889,
+          "lon": -112.1638889,
+          "Dropzone": "Skydive Phoenix"
+        },
+        "MGC": {
+          "lat": 41.70512,
+          "lon": -86.822566,
+          "Dropzone": "Skydive Windy City-Chicago"
+        },
+        "KSFZ": {
+          "lat": 41.9207633,
+          "lon": -71.4913814,
+          "Dropzone": "Boston Skydive Center"
+        },
+        "9G6": {
+          "lat": 43.1735308,
+          "lon": -78.2746325,
+          "Dropzone": "WNYSkydiving"
+        },
+        "ACQ": {
+          "lat": 44.0734639,
+          "lon": -93.5529436,
+          "Dropzone": "Skydive Northstar"
+        },
+        "7VG0": {
+          "lat": 38.6556758,
+          "lon": -77.7872153,
+          "Dropzone": "DC Skydiving Center"
+        },
+        "RAS": {
+          "lat": 27.8118333,
+          "lon": -97.08875,
+          "Dropzone": "Mustang Island Skydiving / Skydive South Texas"
+        },
+        "1JO": {
+          "lat": 30.4872097,
+          "lon": -85.1137958,
+          "Dropzone": "Skydive Panama City"
+        },
+        "MT53": {
+          "lat": 48.098079,
+          "lon": -114.852939,
+          "Dropzone": "Meadow Peak Skydiving"
+        },
+        "B16": {
+          "lat": 43.0802761,
+          "lon": -76.5383756,
+          "Dropzone": "Skydive Central New York"
+        }
+      }
+    ]
+  }

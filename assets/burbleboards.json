@@ -1,0 +1,1037 @@
+[
+  {
+    "name": "Skydive Tecumseh",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7",
+    "dz_id": 7
+  },
+  {
+    "name": "Sample Dropzone",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10",
+    "dz_id": 10
+  },
+  {
+    "name": "Skydive Alabama",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11",
+    "dz_id": 11
+  },
+  {
+    "name": "Skydive Tennessee",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=15",
+    "dz_id": 15
+  },
+  {
+    "name": "Skydive Georgia",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=18",
+    "dz_id": 18
+  },
+  {
+    "name": "Skydive Chicago",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=27",
+    "dz_id": 27
+  },
+  {
+    "name": "Skydive Indianapolis",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=36",
+    "dz_id": 36
+  },
+  {
+    "name": "Wisconsin Skydiving Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=43",
+    "dz_id": 43
+  },
+  {
+    "name": "Des Moines Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=47",
+    "dz_id": 47
+  },
+  {
+    "name": "Skydive the Wasatch",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=48",
+    "dz_id": 48
+  },
+  {
+    "name": "Skydive Philadelphia",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=51",
+    "dz_id": 51
+  },
+  {
+    "name": "Skydive City Zephyrhills",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=53",
+    "dz_id": 53
+  },
+  {
+    "name": "Skydive Sussex",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=57",
+    "dz_id": 57
+  },
+  {
+    "name": "Start Skydiving, LLC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=70",
+    "dz_id": 70
+  },
+  {
+    "name": "Skydive Perris School",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=99",
+    "dz_id": 99
+  },
+  {
+    "name": "Skydive Paraclete XP",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=125",
+    "dz_id": 125
+  },
+  {
+    "name": "Dropzone Denmark",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=178",
+    "dz_id": 178
+  },
+  {
+    "name": "Skydive Elsinore",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=189",
+    "dz_id": 189
+  },
+  {
+    "name": "Skydive Jurien Bay",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=193",
+    "dz_id": 193
+  },
+  {
+    "name": "Parachutisme Adrénaline",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=203",
+    "dz_id": 203
+  },
+  {
+    "name": "SA Skydiving Ops",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=204",
+    "dz_id": 204
+  },
+  {
+    "name": "Parachute 3R-Victo",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=207",
+    "dz_id": 207
+  },
+  {
+    "name": "Music City Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=208",
+    "dz_id": 208
+  },
+  {
+    "name": "Parachute GO Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=215",
+    "dz_id": 215
+  },
+  {
+    "name": "Skydive Operations Demo",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=223",
+    "dz_id": 223
+  },
+  {
+    "name": "JumpTN",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=230",
+    "dz_id": 230
+  },
+  {
+    "name": "Skydive Carolina",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=256",
+    "dz_id": 256
+  },
+  {
+    "name": "WNYSkydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=257",
+    "dz_id": 257
+  },
+  {
+    "name": "Skydive Monroe",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=261",
+    "dz_id": 261
+  },
+  {
+    "name": "Piedmont Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=292",
+    "dz_id": 292
+  },
+  {
+    "name": "Fyrosity®",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=317",
+    "dz_id": 317
+  },
+  {
+    "name": "Skydive Andes Chile",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=329",
+    "dz_id": 329
+  },
+  {
+    "name": "DEMO: APF Demo",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=339",
+    "dz_id": 339
+  },
+  {
+    "name": "Cadence Sky Sports",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=348",
+    "dz_id": 348
+  },
+  {
+    "name": "Skydive Gananoque",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=352",
+    "dz_id": 352
+  },
+  {
+    "name": "Skydive Midwest",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=359",
+    "dz_id": 359
+  },
+  {
+    "name": "Pepes Island Boogie",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=371",
+    "dz_id": 371
+  },
+  {
+    "name": "Skydive Utah",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=385",
+    "dz_id": 385
+  },
+  {
+    "name": "Skydive Orange",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=390",
+    "dz_id": 390
+  },
+  {
+    "name": "Adelaide Skydiving Centre Pty Ltd",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=392",
+    "dz_id": 392
+  },
+  {
+    "name": "Skydive Sebastian",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=396",
+    "dz_id": 396
+  },
+  {
+    "name": "Skydive Netheravon",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=398",
+    "dz_id": 398
+  },
+  {
+    "name": "CSC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=408",
+    "dz_id": 408
+  },
+  {
+    "name": "Skydive Parys",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=409",
+    "dz_id": 409
+  },
+  {
+    "name": "Skydive Twin Cities",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=416",
+    "dz_id": 416
+  },
+  {
+    "name": "Jumptown",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=417",
+    "dz_id": 417
+  },
+  {
+    "name": "Skydive Cincinnati",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=419",
+    "dz_id": 419
+  },
+  {
+    "name": "Skydive Langar",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=531",
+    "dz_id": 531
+  },
+  {
+    "name": "Skydive Tønsberg",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=551",
+    "dz_id": 551
+  },
+  {
+    "name": "Skydive Cross Keys",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=561",
+    "dz_id": 561
+  },
+  {
+    "name": "SkydiveKC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=621",
+    "dz_id": 621
+  },
+  {
+    "name": "DZONE® - BOISE",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=731",
+    "dz_id": 731
+  },
+  {
+    "name": "Skydive The Rock",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=861",
+    "dz_id": 861
+  },
+  {
+    "name": "DZONE® BOZEMAN",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=871",
+    "dz_id": 871
+  },
+  {
+    "name": "Skydive Fargo",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=911",
+    "dz_id": 911
+  },
+  {
+    "name": "Skydive Toronto Inc",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=1111",
+    "dz_id": 1111
+  },
+  {
+    "name": "Aarhus Faldskærms Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=1141",
+    "dz_id": 1141
+  },
+  {
+    "name": "Ozarks Skydive Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=1311",
+    "dz_id": 1311
+  },
+  {
+    "name": "Skydive Suffolk",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=1421",
+    "dz_id": 1421
+  },
+  {
+    "name": "Skydive Voss",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=1911",
+    "dz_id": 1911
+  },
+  {
+    "name": "Blue Sky Ranch",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2023",
+    "dz_id": 2023
+  },
+  {
+    "name": "Skydive Panama City",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2133",
+    "dz_id": 2133
+  },
+  {
+    "name": "Beach SkyTime Castellón",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2251",
+    "dz_id": 2251
+  },
+  {
+    "name": "Dallas Skydive Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2271",
+    "dz_id": 2271
+  },
+  {
+    "name": "Skydive Spain",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2351",
+    "dz_id": 2351
+  },
+  {
+    "name": "Texas Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2401",
+    "dz_id": 2401
+  },
+  {
+    "name": "Skydive Coastal Carolinas",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2521",
+    "dz_id": 2521
+  },
+  {
+    "name": "Aversi Faldskærms Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2581",
+    "dz_id": 2581
+  },
+  {
+    "name": "Skydive West Plains",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2661",
+    "dz_id": 2661
+  },
+  {
+    "name": "Skydive New England",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2921",
+    "dz_id": 2921
+  },
+  {
+    "name": "Skydive Hibaldstow",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2933",
+    "dz_id": 2933
+  },
+  {
+    "name": "SkyDance SkyDiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2943",
+    "dz_id": 2943
+  },
+  {
+    "name": "Canton Air Sports",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2973",
+    "dz_id": 2973
+  },
+  {
+    "name": "Bay Area Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=2993",
+    "dz_id": 2993
+  },
+  {
+    "name": "Midwest Freefall SPC Inc.",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3113",
+    "dz_id": 3113
+  },
+  {
+    "name": "Skydive Pennsylvania",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3293",
+    "dz_id": 3293
+  },
+  {
+    "name": "Skydive Sweden",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3373",
+    "dz_id": 3373
+  },
+  {
+    "name": "Skydive San Diego",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3393",
+    "dz_id": 3393
+  },
+  {
+    "name": "Skydive the Ranch School",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3451",
+    "dz_id": 3451
+  },
+  {
+    "name": "Cleveland Skydiving Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3481",
+    "dz_id": 3481
+  },
+  {
+    "name": "Skydive Houston",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3563",
+    "dz_id": 3563
+  },
+  {
+    "name": "Skydive California",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3773",
+    "dz_id": 3773
+  },
+  {
+    "name": "Skydive Algarve",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3911",
+    "dz_id": 3911
+  },
+  {
+    "name": "Skydive Flanders - Zwartberg",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=3993",
+    "dz_id": 3993
+  },
+  {
+    "name": "Paracentrum Texel",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4043",
+    "dz_id": 4043
+  },
+  {
+    "name": "Skydive Danielson",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4661",
+    "dz_id": 4661
+  },
+  {
+    "name": "Odense Faldskærmscenter",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4671",
+    "dz_id": 4671
+  },
+  {
+    "name": "Silicon Valley Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4763",
+    "dz_id": 4763
+  },
+  {
+    "name": "Skydive Puerto Rico",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4843",
+    "dz_id": 4843
+  },
+  {
+    "name": "Skydive Adventures",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4985",
+    "dz_id": 4985
+  },
+  {
+    "name": "Florida Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=4995",
+    "dz_id": 4995
+  },
+  {
+    "name": "Skydive Flanders - Schaffen",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5215",
+    "dz_id": 5215
+  },
+  {
+    "name": "Skydive Flanders - Moorsele",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5225",
+    "dz_id": 5225
+  },
+  {
+    "name": "Skydive Shenandoah",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5255",
+    "dz_id": 5255
+  },
+  {
+    "name": "AerOhio Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5415",
+    "dz_id": 5415
+  },
+  {
+    "name": "Edmonton Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5445",
+    "dz_id": 5445
+  },
+  {
+    "name": "Skydive Zeeland",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5854",
+    "dz_id": 5854
+  },
+  {
+    "name": "Virginia Skydiving Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=5932",
+    "dz_id": 5932
+  },
+  {
+    "name": "Nordjysk Faldskærmsklub",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6064",
+    "dz_id": 6064
+  },
+  {
+    "name": "Eugene Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6123",
+    "dz_id": 6123
+  },
+  {
+    "name": "Skydive Ameland",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6124",
+    "dz_id": 6124
+  },
+  {
+    "name": "Tessel Air",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6184",
+    "dz_id": 6184
+  },
+  {
+    "name": "Kuwait Skydive & Fly",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6393",
+    "dz_id": 6393
+  },
+  {
+    "name": "Skydive Skåne",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6444",
+    "dz_id": 6444
+  },
+  {
+    "name": "Skydive Rotterdam \"The Flying Dutchmen\"",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6544",
+    "dz_id": 6544
+  },
+  {
+    "name": "Skydive Atlanta",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6673",
+    "dz_id": 6673
+  },
+  {
+    "name": "Skydive Viken",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6693",
+    "dz_id": 6693
+  },
+  {
+    "name": "Lincoln Sport Parachute Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6743",
+    "dz_id": 6743
+  },
+  {
+    "name": "Prostipad",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6784",
+    "dz_id": 6784
+  },
+  {
+    "name": "Skydive Extreme Calgary",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6791",
+    "dz_id": 6791
+  },
+  {
+    "name": "Skydive the Falls",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6891",
+    "dz_id": 6891
+  },
+  {
+    "name": "Skydive Taft",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=6971",
+    "dz_id": 6971
+  },
+  {
+    "name": "Abu Dhabi Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7131",
+    "dz_id": 7131
+  },
+  {
+    "name": "Skydive Viborg",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7201",
+    "dz_id": 7201
+  },
+  {
+    "name": "Skydive Thailand",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7271",
+    "dz_id": 7271
+  },
+  {
+    "name": "Skydive Dubai Desert Campus",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7311",
+    "dz_id": 7311
+  },
+  {
+    "name": "Skydive Dubai Palm",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7331",
+    "dz_id": 7331
+  },
+  {
+    "name": "Skydive Gyrocopter",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7371",
+    "dz_id": 7371
+  },
+  {
+    "name": "Crystal Coast Skydiving LLC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=7411",
+    "dz_id": 7411
+  },
+  {
+    "name": "iSkydive detroit",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8071",
+    "dz_id": 8071
+  },
+  {
+    "name": "iSkydive charlevoix",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8081",
+    "dz_id": 8081
+  },
+  {
+    "name": "deserttest",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8082",
+    "dz_id": 8082
+  },
+  {
+    "name": "palmtest",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8092",
+    "dz_id": 8092
+  },
+  {
+    "name": "Skydive Pretoria",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8111",
+    "dz_id": 8111
+  },
+  {
+    "name": "iSkydive miami",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8131",
+    "dz_id": 8131
+  },
+  {
+    "name": "Skydive GB Parachute Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8144",
+    "dz_id": 8144
+  },
+  {
+    "name": "Sibson Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8154",
+    "dz_id": 8154
+  },
+  {
+    "name": "Skydive STL",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8171",
+    "dz_id": 8171
+  },
+  {
+    "name": "Skydive the Gulf",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8281",
+    "dz_id": 8281
+  },
+  {
+    "name": "Skydive South Boston",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8301",
+    "dz_id": 8301
+  },
+  {
+    "name": "iSkydive dc",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8351",
+    "dz_id": 8351
+  },
+  {
+    "name": "iSkydive dallas fort worth",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8411",
+    "dz_id": 8411
+  },
+  {
+    "name": "iSkydive los angeles",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8421",
+    "dz_id": 8421
+  },
+  {
+    "name": "Pacific Northwest Skydiving Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8461",
+    "dz_id": 8461
+  },
+  {
+    "name": "Beccles Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8494",
+    "dz_id": 8494
+  },
+  {
+    "name": "Skydive Colorado",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8551",
+    "dz_id": 8551
+  },
+  {
+    "name": "PCS Tandem Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8671",
+    "dz_id": 8671
+  },
+  {
+    "name": "iSkydive charleston SC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8691",
+    "dz_id": 8691
+  },
+  {
+    "name": "iSkydive south beach",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=8991",
+    "dz_id": 8991
+  },
+  {
+    "name": "Skydive Oslo",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=9094",
+    "dz_id": 9094
+  },
+  {
+    "name": "Black Knights Parachute Centre",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=9134",
+    "dz_id": 9134
+  },
+  {
+    "name": "Parachute Ottawa",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=9401",
+    "dz_id": 9401
+  },
+  {
+    "name": "Skydive Bjorli Tønsberg",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10004",
+    "dz_id": 10004
+  },
+  {
+    "name": "Test dropzone",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10341",
+    "dz_id": 10341
+  },
+  {
+    "name": "Flying-Devil",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10381",
+    "dz_id": 10381
+  },
+  {
+    "name": "Deep Dive Dubai",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10571",
+    "dz_id": 10571
+  },
+  {
+    "name": "iSkydive new york city",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10631",
+    "dz_id": 10631
+  },
+  {
+    "name": "Commando Skydivers Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10654",
+    "dz_id": 10654
+  },
+  {
+    "name": "Faldskærmsklubben.DK",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10761",
+    "dz_id": 10761
+  },
+  {
+    "name": "Skydive Ireland",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=10864",
+    "dz_id": 10864
+  },
+  {
+    "name": "Faldskærmsklubben Nordenfjords",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11021",
+    "dz_id": 11021
+  },
+  {
+    "name": "Saltamos.es (SkydiveBCN)",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11051",
+    "dz_id": 11051
+  },
+  {
+    "name": "Skydive Finland",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11491",
+    "dz_id": 11491
+  },
+  {
+    "name": "YUU Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11551",
+    "dz_id": 11551
+  },
+  {
+    "name": "Elevation BCN",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11621",
+    "dz_id": 11621
+  },
+  {
+    "name": "Skydive Milwaukee / Sky Knights SPC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11651",
+    "dz_id": 11651
+  },
+  {
+    "name": "Xline",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11711",
+    "dz_id": 11711
+  },
+  {
+    "name": "Inflight",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11721",
+    "dz_id": 11721
+  },
+  {
+    "name": "Parachute Montréal Rive-Nord",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11731",
+    "dz_id": 11731
+  },
+  {
+    "name": "Parachute Montréal Rive-Sud",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11741",
+    "dz_id": 11741
+  },
+  {
+    "name": "Far North Freefall",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11774",
+    "dz_id": 11774
+  },
+  {
+    "name": "Skydive Oppdal",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=11984",
+    "dz_id": 11984
+  },
+  {
+    "name": "Jump Omaha Skydiving",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12031",
+    "dz_id": 12031
+  },
+  {
+    "name": "Skydive Mountain City",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12061",
+    "dz_id": 12061
+  },
+  {
+    "name": "Husein Test Dropzone",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12231",
+    "dz_id": 12231
+  },
+  {
+    "name": "Husein dev dropzone",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12234",
+    "dz_id": 12234
+  },
+  {
+    "name": "Skydive NEPA",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12251",
+    "dz_id": 12251
+  },
+  {
+    "name": "ACTION FLIGHT AVIATION LLC - Aerobatic Flights",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12381",
+    "dz_id": 12381
+  },
+  {
+    "name": "Ultimate Skydiving Adventures",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12431",
+    "dz_id": 12431
+  },
+  {
+    "name": "Boston Skydive Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12441",
+    "dz_id": 12441
+  },
+  {
+    "name": "ACTION FLIGHT AVIATION LLC - Hot Air Balloon Flights",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12661",
+    "dz_id": 12661
+  },
+  {
+    "name": "ACTION FLIGHT AVIATION LLC - Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12671",
+    "dz_id": 12671
+  },
+  {
+    "name": "Skydive Windy City",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12691",
+    "dz_id": 12691
+  },
+  {
+    "name": "XPark By Etisalat",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12701",
+    "dz_id": 12701
+  },
+  {
+    "name": "USPA",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12711",
+    "dz_id": 12711
+  },
+  {
+    "name": "Nordsjællands Faldskærms Klub",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=12991",
+    "dz_id": 12991
+  },
+  {
+    "name": "Skydive SWOOP",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13011",
+    "dz_id": 13011
+  },
+  {
+    "name": "Skydive Dubai Special Projects",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13014",
+    "dz_id": 13014
+  },
+  {
+    "name": "The Skydive School",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13071",
+    "dz_id": 13071
+  },
+  {
+    "name": "Skydive Northstar LLC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13261",
+    "dz_id": 13261
+  },
+  {
+    "name": "Grenland Fallskjermklubb",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13298",
+    "dz_id": 13298
+  },
+  {
+    "name": "Gateway Skydiving Center",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13446",
+    "dz_id": 13446
+  },
+  {
+    "name": "Skydive The Volcano",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13686",
+    "dz_id": 13686
+  },
+  {
+    "name": "Hillman Farm Skydivers Inc",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13766",
+    "dz_id": 13766
+  },
+  {
+    "name": "Skydive Seneca Lake",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13926",
+    "dz_id": 13926
+  },
+  {
+    "name": "Viva Skydive",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13936",
+    "dz_id": 13936
+  },
+  {
+    "name": "Seven Hills Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=13976",
+    "dz_id": 13976
+  },
+  {
+    "name": "Skydive Raleigh",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14056",
+    "dz_id": 14056
+  },
+  {
+    "name": "World Championships 2024",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14211",
+    "dz_id": 14211
+  },
+  {
+    "name": "SkydiveTC",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14231",
+    "dz_id": 14231
+  },
+  {
+    "name": "Airborne Petawawa",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14271",
+    "dz_id": 14271
+  },
+  {
+    "name": "Above the Poconos Skydivers",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14331",
+    "dz_id": 14331
+  },
+  {
+    "name": "Demo For Livia",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14501",
+    "dz_id": 14501
+  },
+  {
+    "name": "Skydive Dubai Aviation Club",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14561",
+    "dz_id": 14561
+  },
+  {
+    "name": "SKYDIVE SKYDOWN",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14601",
+    "dz_id": 14601
+  },
+  {
+    "name": "Skydive East Tennessee",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14631",
+    "dz_id": 14631
+  },
+  {
+    "name": "Gyro Flight Training",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14681",
+    "dz_id": 14681
+  },
+  {
+    "name": "Troms fallskjermklubb",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14682",
+    "dz_id": 14682
+  },
+  {
+    "name": "The Banks Wedding",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14941",
+    "dz_id": 14941
+  },
+  {
+    "name": "Skydive Chesapeake",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=14961",
+    "dz_id": 14961
+  },
+  {
+    "name": "Skydive Bend",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=15101",
+    "dz_id": 15101
+  },
+  {
+    "name": "Go Skydive Nashville",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=15261",
+    "dz_id": 15261
+  },
+  {
+    "name": "Nimbus Fallskjermklubb",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=16022",
+    "dz_id": 16022
+  },
+  {
+    "name": "Skydive Elément",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=16032",
+    "dz_id": 16032
+  },
+  {
+    "name": "Skydive South Africa",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=16042",
+    "dz_id": 16042
+  },
+  {
+    "name": "Skydive pharoas",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=16082",
+    "dz_id": 16082
+  },
+  {
+    "name": "Connecticut Parachutists Inc",
+    "url": "https://dzm.burblesoft.com/jumper_manifest_public?dz_id=16141",
+    "dz_id": 16141
+  }
+]
