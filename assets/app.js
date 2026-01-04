@@ -434,8 +434,9 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
     };
 
     // 1. Calculate canopy flight characteristics
-    const timeUnderCanopyHours = (OPENING_ALTITUDE_FT - 0) / ftPerMile / CANOPY_DESCENT_RATE_MPH;
-    const canopyPassiveDrift = calculateDriftVector(OPENING_ALTITUDE_FT, 0, CANOPY_DESCENT_RATE_MPH);
+    const patternAlt = (typeof PATTERN_ALTITUDE_FT !== 'undefined') ? PATTERN_ALTITUDE_FT : 0;
+    const timeUnderCanopyHours = (OPENING_ALTITUDE_FT - patternAlt) / ftPerMile / CANOPY_DESCENT_RATE_MPH;
+    const canopyPassiveDrift = calculateDriftVector(OPENING_ALTITUDE_FT, patternAlt, CANOPY_DESCENT_RATE_MPH);
 
     // 2. Determine the required opening point relative to the DZ
     const H_rad = jumpRunHeadingDeg * Math.PI / 180;

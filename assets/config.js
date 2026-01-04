@@ -52,8 +52,9 @@ const HEX_TO_TAIL = {
 
 // Skydiver & Canopy Parameters
 // Adjust these based on your typical jump profile
-const EXIT_ALTITUDE_FT = 13000;
-const OPENING_ALTITUDE_FT = 3000;
+const EXIT_ALTITUDE_FT = 14000;
+const OPENING_ALTITUDE_FT = 4000;
+const PATTERN_ALTITUDE_FT = 1000; // Stop drift calculation at pattern altitude
 const FREEFALL_TERMINAL_VELOCITY_MPH = 120;
 const CANOPY_DESCENT_RATE_MPH = 15;
 const CANOPY_FORWARD_SPEED_MPH = 25;
