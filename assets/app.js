@@ -433,10 +433,11 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
         return { dx, dy };
     };
 
-    // 1. Calculate canopy flight characteristics
-    const patternAlt = (typeof PATTERN_ALTITUDE_FT !== 'undefined') ? PATTERN_ALTITUDE_FT : 0;
-    const timeUnderCanopyHours = (OPENING_ALTITUDE_FT - patternAlt) / ftPerMile / CANOPY_DESCENT_RATE_MPH;
-    const canopyPassiveDrift = calculateDriftVector(OPENING_ALTITUDE_FT, patternAlt, CANOPY_DESCENT_RATE_MPH);
+    // 1. Calculate canopy flight from opening to holding area
+    // Target: reach holding area at 2500ft with altitude for pattern work
+    const holdingAlt = (typeof HOLDING_AREA_ALTITUDE_FT !== 'undefined') ? HOLDING_AREA_ALTITUDE_FT : 1000;
+    const timeUnderCanopyHours = (OPENING_ALTITUDE_FT - holdingAlt) / ftPerMile / CANOPY_DESCENT_RATE_MPH;
+    const canopyPassiveDrift = calculateDriftVector(OPENING_ALTITUDE_FT, holdingAlt, CANOPY_DESCENT_RATE_MPH);
 
     // 2. Determine the required opening point relative to the DZ
     const H_rad = jumpRunHeadingDeg * Math.PI / 180;
@@ -446,10 +447,11 @@ function computeOffsetMiles(jumpRunHeadingDeg) {
 
     const flyableDistMiles = CANOPY_FORWARD_SPEED_MPH * timeUnderCanopyHours;
 
-    // Calculate opening point: compensate for drift, reduced by ability to fly into wind
-    // Negative offset = upwind of DZ, Positive offset = downwind of DZ
-    // Canopy can fly into wind to reduce the needed offset
-    const openingPointOffsetMiles = -(canopyDriftAlongHeading - flyableDistMiles);
+    // Calculate opening point: open upwind, fly downwind with wind assistance
+    // Negative offset = upwind of DZ (want to be here)
+    // Positive offset = downwind of DZ
+    // Strategy: open upwind, let wind push you back while flying downwind
+    const openingPointOffsetMiles = -(canopyDriftAlongHeading + flyableDistMiles);
     
     // 3. Calculate freefall drift
     const freefallDrift = calculateDriftVector(EXIT_ALTITUDE_FT, OPENING_ALTITUDE_FT, FREEFALL_TERMINAL_VELOCITY_MPH);

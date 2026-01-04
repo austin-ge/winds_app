@@ -54,7 +54,8 @@ const HEX_TO_TAIL = {
 // Adjust these based on your typical jump profile
 const EXIT_ALTITUDE_FT = 14000;
 const OPENING_ALTITUDE_FT = 4000;
-const PATTERN_ALTITUDE_FT = 1000; // Stop drift calculation at pattern altitude
+const HOLDING_AREA_ALTITUDE_FT = 2500; // Target altitude to reach holding area
+const PATTERN_ALTITUDE_FT = 1000; // Pattern entry altitude
 const FREEFALL_TERMINAL_VELOCITY_MPH = 120;
 const CANOPY_DESCENT_RATE_MPH = 15;
 const CANOPY_FORWARD_SPEED_MPH = 25;
