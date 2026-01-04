@@ -1103,11 +1103,28 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 }
 
 async function fetchAircraftPosition() {
+  let data;
+
+  // Try primary endpoint (local dump1090)
   try {
     const res = await fetch(ADSB_ENDPOINT, { cache: "no-store" });
-    if (!res.ok) throw new Error("ADS-B HTTP " + res.status);
-    const data = await res.json();
+    if (!res.ok) throw new Error("Primary ADS-B HTTP " + res.status);
+    data = await res.json();
+  } catch (primaryErr) {
+    console.log("Primary ADS-B failed, trying fallback:", primaryErr.message);
 
+    // Try fallback endpoint (adsb.lol)
+    try {
+      const res = await fetch(ADSB_FALLBACK_ENDPOINT, { cache: "no-store" });
+      if (!res.ok) throw new Error("Fallback ADS-B HTTP " + res.status);
+      data = await res.json();
+    } catch (fallbackErr) {
+      console.error("Both ADS-B sources failed:", fallbackErr);
+      return;
+    }
+  }
+
+  try {
     const planes = data.aircraft || data.ac || [];
     if (!planes.length) {
       clearJumpPlaneHighlight();

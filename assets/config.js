@@ -28,8 +28,10 @@ const approxAltitudeFtByLevel = {
 };
 
 // ADS-B Configuration
-// Uses nginx proxy configured in nginx.conf to fetch from adsb.lol
+// Primary: local dump1090 (via Tailscale)
+// Fallback: adsb.lol API
 const ADSB_ENDPOINT = "/adsb";
+const ADSB_FALLBACK_ENDPOINT = "/adsb-fallback";
 
 // Jump Plane Configuration
 // Hex codes (ICAO 24-bit) for your jump planes (lowercase)
