@@ -980,12 +980,12 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
 
   if (statusEl && planeMeta) {
     const hex = (planeMeta.hex || planeMeta.icao || "").toLowerCase();
-    const apiReg = planeMeta.r || planeMeta.registration;
+    const apiReg = planeMeta.r || planeMeta.registration || (planeMeta.flight || "").trim();
     const tail = apiReg || HEX_TO_TAIL[hex] || hex.toUpperCase();
 
-    const altRaw = planeMeta.alt_geom ?? planeMeta.alt_baro ?? 0;
+    const altRaw = planeMeta.alt_geom ?? planeMeta.alt_baro ?? planeMeta.altitude ?? 0;
     const alt = Math.round(altRaw);
-    const gs = planeMeta.gs != null ? Math.round(planeMeta.gs) : null;
+    const gs = planeMeta.gs != null ? Math.round(planeMeta.gs) : (planeMeta.speed != null ? Math.round(planeMeta.speed) : null);
 
     let html = `<strong>${tail}</strong><br><span class="small">`;
     html += `🔼 ${alt.toLocaleString()} ft`;
@@ -1023,9 +1023,9 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
     seenHex.add(hex);
 
-    const apiReg = a.r || a.registration || hex.toUpperCase();
-    const alt = Math.round(a.alt_geom ?? a.alt_baro ?? 0);
-    const gs  = a.gs != null ? Math.round(a.gs) : null;
+    const apiReg = a.r || a.registration || (a.flight || "").trim() || hex.toUpperCase();
+    const alt = Math.round(a.alt_geom ?? a.alt_baro ?? a.altitude ?? 0);
+    const gs  = a.gs != null ? Math.round(a.gs) : (a.speed != null ? Math.round(a.speed) : null);
     const track = a.track != null ? a.track : (a.heading != null ? a.heading : null);
 
     const colors = getAltitudeColor(alt);
@@ -1138,7 +1138,7 @@ async function fetchAircraftPosition() {
       const lon = a.lon;
       if (typeof lat !== "number" || typeof lon !== "number") return false;
 
-      const alt = a.alt_geom ?? a.alt_baro ?? 0;
+      const alt = a.alt_geom ?? a.alt_baro ?? a.altitude ?? 0;
       if (alt < 0 || alt > 50000) return false;
 
       return true;
@@ -1154,8 +1154,8 @@ async function fetchAircraftPosition() {
     if (jumpCandidates.length) {
       chosenJump = jumpCandidates[0];
       for (const a of jumpCandidates.slice(1)) {
-        const altBest = chosenJump.alt_geom ?? chosenJump.alt_baro ?? 0;
-        const altCur = a.alt_geom ?? a.alt_baro ?? 0;
+        const altBest = chosenJump.alt_geom ?? chosenJump.alt_baro ?? chosenJump.altitude ?? 0;
+        const altCur = a.alt_geom ?? a.alt_baro ?? a.altitude ?? 0;
         if (altCur > altBest) chosenJump = a;
       }
 
