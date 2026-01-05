@@ -60,6 +60,10 @@ app.get("/adsb-fallback", async (req, res) => {
   await proxyJson(ADSB_FALLBACK_URL, res);
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.listen(PORT, () => {
   console.log(`winds_app server listening on ${PORT}`);
 });
