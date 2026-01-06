@@ -32,6 +32,7 @@ const approxAltitudeFtByLevel = {
 // Fallback: adsb.lol API
 const ADSB_ENDPOINT = "/adsb";
 const ADSB_FALLBACK_ENDPOINT = "/adsb-fallback";
+const ADSB_DISPLAY_RADIUS_NM = 20;
 
 // Jump Plane Configuration
 // Hex codes (ICAO 24-bit) for your jump planes (lowercase)
