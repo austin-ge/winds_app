@@ -20,6 +20,16 @@ let jumpRunSource = "auto-winds";
 let jumpRunGroundSpeedKnots = 0;
 let exitSeparationSeconds = 0;
 
+// ADS-B status tracking for UI
+let adsbLastSuccessAt = null;
+let adsbLastSource = null;
+let adsbLastFailureAt = null;
+let adsbLastFailureMessage = "";
+
+// Jump aircraft status tracking
+let jumpPlaneActive = false;
+let jumpPlaneLastTail = null;
+
 /* ================================
    LOCAL STORAGE CACHING
 =================================== */
@@ -124,6 +134,71 @@ function setLoadingState(elementId, isLoading) {
     spinner.classList.remove('hidden');
   } else {
     spinner.classList.add('hidden');
+  }
+}
+
+function getAgeLabel(timestamp) {
+  if (!timestamp) return "--";
+  const ageMs = Date.now() - timestamp;
+  const ageMinutes = Math.round(ageMs / 60000);
+
+  if (ageMinutes < 1) return "just now";
+  if (ageMinutes < 60) return `${ageMinutes}m`;
+  const ageHours = Math.round(ageMinutes / 60);
+  return `${ageHours}h`;
+}
+
+function setStatusBadge(el, statusClass, label) {
+  if (!el) return;
+  el.classList.remove("status-good", "status-warning", "status-neutral");
+  el.classList.add(statusClass);
+  el.textContent = label;
+}
+
+function updateStatusStrip() {
+  const windsEl = document.getElementById("status-winds");
+  const adsbEl = document.getElementById("status-adsb");
+  const jumpEl = document.getElementById("status-jump");
+
+  if (windsEl) {
+    if (!windsTimestamp) {
+      setStatusBadge(windsEl, "status-neutral", "Winds --");
+    } else {
+      const ageMinutes = Math.round((Date.now() - windsTimestamp) / 60000);
+      const label = `Winds ${getAgeLabel(windsTimestamp)}`;
+      if (ageMinutes > 90) {
+        setStatusBadge(windsEl, "status-warning", label);
+      } else {
+        setStatusBadge(windsEl, "status-good", label);
+      }
+    }
+  }
+
+  if (adsbEl) {
+    if (!adsbLastSuccessAt) {
+      if (adsbLastFailureAt) {
+        setStatusBadge(adsbEl, "status-warning", "ADS-B error");
+      } else {
+        setStatusBadge(adsbEl, "status-neutral", "ADS-B --");
+      }
+    } else {
+      const ageSeconds = Math.round((Date.now() - adsbLastSuccessAt) / 1000);
+      const sourceLabel = adsbLastSource ? ` (${adsbLastSource})` : "";
+      const label = `ADS-B ${getAgeLabel(adsbLastSuccessAt)}${sourceLabel}`;
+      if (ageSeconds > 60) {
+        setStatusBadge(adsbEl, "status-warning", label);
+      } else {
+        setStatusBadge(adsbEl, "status-good", label);
+      }
+    }
+  }
+
+  if (jumpEl) {
+    if (jumpPlaneActive && jumpPlaneLastTail) {
+      setStatusBadge(jumpEl, "status-good", `Jump ${jumpPlaneLastTail}`);
+    } else {
+      setStatusBadge(jumpEl, "status-neutral", "Jump none");
+    }
   }
 }
 
@@ -313,6 +388,8 @@ function renderWindsTable() {
 
   // Group consecutive identical winds into ranges
   const groupedWinds = groupWindsByRange(windsAloft);
+  const maxWindSpeed = Math.max(...groupedWinds.map(group => Math.round(group.speedKt)));
+  const speedScaleMax = Math.max(40, maxWindSpeed);
 
   groupedWinds.forEach(group => {
     const tr = document.createElement("tr");
@@ -334,10 +411,18 @@ function renderWindsTable() {
       tr.classList.add('altitude-highlight');
     }
 
+    const speedPercent = windSpeed === 0
+      ? 0
+      : Math.max(8, Math.round((windSpeed / speedScaleMax) * 100));
+    const speedScale = speedPercent / 100;
+
     tr.innerHTML = `
       <td>${altDisplay}</td>
       <td><span class="wind-dir"><span class="wind-arrow">${arrow}</span>${windDir}</span></td>
-      <td class="${speedClass}">${windSpeed}</td>
+      <td class="wind-speed-cell ${speedClass}">
+        <span class="wind-speed-value">${windSpeed}</span>
+        <span class="wind-speed-bar" style="transform: scaleX(${speedScale});"></span>
+      </td>
     `;
     tbody.appendChild(tr);
   });
@@ -360,10 +445,12 @@ function updateWindsTimestampDisplay() {
 
   // Show warning if data is stale (older than 90 minutes)
   if (ageMinutes > 90) {
-    updatedEl.innerHTML = `<span style="color: #ff9800;">⚠ Winds data is ${ageMinutes} min old</span>`;
+    updatedEl.innerHTML = `<span style="color: var(--warn);">⚠ Winds data is ${ageMinutes} min old</span>`;
   } else {
     updatedEl.textContent = `Updated${ageStr}`;
   }
+
+  updateStatusStrip();
 }
 
 /* ================================
@@ -934,6 +1021,10 @@ function clearJumpPlaneHighlight() {
   if (statusEl) {
     statusEl.textContent = "No jump aircraft currently tracked.";
   }
+
+  jumpPlaneActive = false;
+  jumpPlaneLastTail = null;
+  updateStatusStrip();
 }
 
 function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
@@ -968,7 +1059,7 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
   if (!jumpPlaneTrackLine) {
     jumpPlaneTrackLine = L.polyline(jumpPlaneTrackCoords, {
       weight: 3,
-      color: "#9c27b0",
+      color: "#2a9d8f",
       opacity: 0.7,
       dashArray: "8 4",
       className: "jump-plane-trail"
@@ -996,6 +1087,10 @@ function updateJumpPlaneHighlight(lat, lon, trackDeg, planeMeta) {
     }
     html += `</span>`;
     statusEl.innerHTML = html;
+
+    jumpPlaneActive = true;
+    jumpPlaneLastTail = tail;
+    updateStatusStrip();
   }
 }
 
@@ -1106,12 +1201,14 @@ function updateAllTrafficMarkers(planes, excludeHex) {
 
 async function fetchAircraftPosition() {
   let data;
+  let source = null;
 
   // Try primary endpoint (local dump1090)
   try {
     const res = await fetch(ADSB_ENDPOINT, { cache: "no-store" });
     if (!res.ok) throw new Error("Primary ADS-B HTTP " + res.status);
     data = await res.json();
+    source = "primary";
   } catch (primaryErr) {
     console.log("Primary ADS-B failed, trying fallback:", primaryErr.message);
 
@@ -1120,11 +1217,21 @@ async function fetchAircraftPosition() {
       const res = await fetch(ADSB_FALLBACK_ENDPOINT, { cache: "no-store" });
       if (!res.ok) throw new Error("Fallback ADS-B HTTP " + res.status);
       data = await res.json();
+      source = "fallback";
     } catch (fallbackErr) {
       console.error("Both ADS-B sources failed:", fallbackErr);
+      adsbLastFailureAt = Date.now();
+      adsbLastFailureMessage = fallbackErr.message;
+      updateStatusStrip();
       return;
     }
   }
+
+  adsbLastSuccessAt = Date.now();
+  adsbLastSource = source;
+  adsbLastFailureAt = null;
+  adsbLastFailureMessage = "";
+  updateStatusStrip();
 
   try {
     const planes = data.aircraft || data.ac || [];
@@ -1199,6 +1306,7 @@ function initializeFromCache() {
 // Initial draw (before winds load)
 updateJumpRun();
 renderWindsTable();
+updateStatusStrip();
 
 // Try to load cached winds first for instant display
 initializeFromCache();

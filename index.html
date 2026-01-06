@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS -->
   <link
@@ -30,6 +30,22 @@
 
   <!-- Error/Status Banner -->
   <div id="error-banner" class="error-banner hidden"></div>
+
+  <!-- Status Strip -->
+  <div class="status-strip">
+    <div class="status-item">
+      <span class="status-label">Winds</span>
+      <span id="status-winds" class="status-badge status-neutral">--</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">ADS-B</span>
+      <span id="status-adsb" class="status-badge status-neutral">--</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Jump</span>
+      <span id="status-jump" class="status-badge status-neutral">--</span>
+    </div>
+  </div>
 
   <div class="sidebar-content">
     <!-- Dropzone Card -->
