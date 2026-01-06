@@ -6,8 +6,9 @@ const app = express();
 const PORT = Number(process.env.PORT || 8080);
 const ADSB_PRIMARY_URL = process.env.ADSB_PRIMARY_URL ||
   "http://100.92.158.48/dump1090/data/aircraft.json";
+const ADSB_FALLBACK_RADIUS_NM = Number(process.env.ADSB_FALLBACK_RADIUS_NM || 20);
 const ADSB_FALLBACK_URL = process.env.ADSB_FALLBACK_URL ||
-  "https://api.adsb.lol/v2/point/42.703153/-87.958641/20";
+  `https://api.adsb.lol/v2/point/42.703153/-87.958641/${ADSB_FALLBACK_RADIUS_NM}`;
 const ADSB_TIMEOUT_MS = Number(process.env.ADSB_TIMEOUT_MS || 2000);
 
 function setAdsbHeaders(res) {
