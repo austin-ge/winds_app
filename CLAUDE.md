@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Winds App is a single-page web application for skydiving dropzones that visualizes upper-air wind conditions and calculates optimal jump run parameters. It's designed for real-time display boards, primarily deployed on Raspberry Pi hardware.
+Winds App is a single-page web application for skydiving dropzones that visualizes upper-air wind conditions and calculates optimal jump run parameters. It's designed for real-time display boards.
 
 **Core Features:**
 - Wind data visualization from GFS (Global Forecast System) via Open-Meteo API
@@ -11,7 +11,7 @@ Winds App is a single-page web application for skydiving dropzones that visualiz
 - ADS-B aircraft tracking with jump plane highlighting
 - Interactive Leaflet satellite map with jump run line visualization
 
-**Current Deployment:** `https://spot.austin-ge.com` (Skydive Midwest)
+**Current Deployment:** `https://spotboard.xyz` (Skydive Midwest)
 
 ## Tech Stack
 
@@ -19,7 +19,7 @@ Winds App is a single-page web application for skydiving dropzones that visualiz
 - **Backend:** Node.js + Express.js
 - **Mapping:** Leaflet.js with Esri satellite tiles
 - **External APIs:** Open-Meteo (weather), adsb.lol (aircraft tracking)
-- **Deployment:** Docker (Alpine Linux base)
+- **Deployment:** Dokploy (Docker, Alpine Linux base)
 
 ## Project Structure
 
