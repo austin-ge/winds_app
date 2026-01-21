@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Skydive DZ Winds & Jump Run</title>
@@ -8,128 +9,133 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+    rel="stylesheet">
 
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
   <link rel="stylesheet" href="assets/styles.css">
 </head>
+
 <body>
 
-<div id="sidebar">
-  <!-- Header -->
-  <div class="sidebar-header">
-    <h1>💨 Winds & Jump Run</h1>
-    <div class="tagline">Live GFS upper-air data • Auto-calculated heading</div>
-  </div>
-
-  <!-- Error/Status Banner -->
-  <div id="error-banner" class="error-banner hidden"></div>
-
-  <!-- Status Strip -->
-  <div class="status-strip">
-    <div class="status-item">
-      <span class="status-label">Winds</span>
-      <span id="status-winds" class="status-badge status-neutral">--</span>
+  <div id="sidebar">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <h1>💨 Winds & Jump Run</h1>
+      <div class="tagline">Live GFS upper-air data • Auto-calculated heading</div>
     </div>
-    <div class="status-item">
-      <span class="status-label">ADS-B</span>
-      <span id="status-adsb" class="status-badge status-neutral">--</span>
-    </div>
-    <div class="status-item">
-      <span class="status-label">Jump</span>
-      <span id="status-jump" class="status-badge status-neutral">--</span>
-    </div>
-  </div>
 
-  <div class="sidebar-content">
-    <!-- Dropzone Card -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">📍</span>
-        <h2 class="card-title">Dropzone</h2>
+    <!-- Error/Status Banner -->
+    <div id="error-banner" class="error-banner hidden"></div>
+
+    <!-- Status Strip -->
+    <div class="status-strip">
+      <div class="status-item">
+        <span class="status-label">Winds</span>
+        <span id="status-winds" class="status-badge status-neutral">--</span>
       </div>
-      <div class="card-body">
-        <div class="dz-info">
-          <span class="dz-dot"></span>
-          <div>
-            <strong><span id="dz-name">Your DZ Name</span></strong><br>
-            <span class="small"><span id="dz-lat"></span>, <span id="dz-lon"></span></span>
+      <div class="status-item">
+        <span class="status-label">ADS-B</span>
+        <span id="status-adsb" class="status-badge status-neutral">--</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Jump</span>
+        <span id="status-jump" class="status-badge status-neutral">--</span>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Dropzone Card -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">📍</span>
+          <h2 class="card-title">Dropzone</h2>
+        </div>
+        <div class="card-body">
+          <div class="dz-info">
+            <span class="dz-dot"></span>
+            <div>
+              <strong><span id="dz-name">Your DZ Name</span></strong><br>
+              <span class="small"><span id="dz-lat"></span>, <span id="dz-lon"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jump Run Card -->
+      <div class="card card-jump-run">
+        <div class="card-header">
+          <span class="card-icon">✈️</span>
+          <h2 class="card-title">Jump Run</h2>
+        </div>
+        <div class="card-body">
+          <div class="jump-run-display">
+            <div id="jump-run-summary" class="jump-run-main">---° @ +0.00</div>
+            <div class="jump-run-label">HEADING • OFFSET (MI)</div>
+          </div>
+          <div class="jump-run-display">
+            <div id="ground-speed-summary" class="jump-run-main">-- kts • -- sec</div>
+            <div class="jump-run-label">GROUND SPEED • GROUP SEPARATION (ESTIMATE)</div>
+          </div>
+          <div class="timestamp" id="jump-run-updated">Updated --</div>
+        </div>
+      </div>
+
+      <!-- Winds Aloft Card -->
+      <div class="card card-winds">
+        <div class="card-header">
+          <span class="card-icon">🌬️</span>
+          <h2 class="card-title">Winds Aloft</h2>
+          <span id="winds-loading" class="loading-spinner hidden"></span>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Alt (ft)</th>
+                <th>Dir (°)</th>
+                <th>Spd (kt)</th>
+              </tr>
+            </thead>
+            <tbody id="winds-table-body"></tbody>
+          </table>
+          <div id="winds-updated" class="timestamp">--</div>
+        </div>
+      </div>
+
+      <!-- Jump Aircraft Card -->
+      <div class="card card-aircraft">
+        <div class="card-header">
+          <span class="card-icon">🛩️</span>
+          <h2 class="card-title">Jump Aircraft</h2>
+        </div>
+        <div class="card-body">
+          <div class="small">Tracks N692DA / N693DA / N694DA / N698DA near the DZ.</div>
+          <div id="aircraft-status" class="aircraft-display">
+            No jump aircraft currently tracked.
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Jump Run Card -->
-    <div class="card card-jump-run">
-      <div class="card-header">
-        <span class="card-icon">✈️</span>
-        <h2 class="card-title">Jump Run</h2>
-      </div>
-      <div class="card-body">
-        <div class="jump-run-display">
-          <div id="jump-run-summary" class="jump-run-main">---° @ +0.00</div>
-          <div class="jump-run-label">HEADING • OFFSET (MI)</div>
-        </div>
-        <div class="jump-run-display">
-          <div id="ground-speed-summary" class="jump-run-main">-- kts • -- sec</div>
-          <div class="jump-run-label">GROUND SPEED • GROUP SEPARATION (ESTIMATE)</div>
-        </div>
-        <div class="timestamp" id="jump-run-updated">Updated --</div>
-      </div>
-    </div>
-
-    <!-- Winds Aloft Card -->
-    <div class="card card-winds">
-      <div class="card-header">
-        <span class="card-icon">🌬️</span>
-        <h2 class="card-title">Winds Aloft</h2>
-        <span id="winds-loading" class="loading-spinner hidden"></span>
-      </div>
-      <div class="card-body">
-        <table>
-          <thead>
-            <tr>
-              <th>Alt (ft)</th>
-              <th>Dir (°)</th>
-              <th>Spd (kt)</th>
-            </tr>
-          </thead>
-          <tbody id="winds-table-body"></tbody>
-        </table>
-        <div id="winds-updated" class="timestamp">--</div>
-      </div>
-    </div>
-
-    <!-- Jump Aircraft Card -->
-    <div class="card card-aircraft">
-      <div class="card-header">
-        <span class="card-icon">🛩️</span>
-        <h2 class="card-title">Jump Aircraft</h2>
-      </div>
-      <div class="card-body">
-        <div class="small">Tracks N692DA / N693DA / N694DA / N698DA near the DZ.</div>
-        <div id="aircraft-status" class="aircraft-display">
-          No jump aircraft currently tracked.
-        </div>
-      </div>
-    </div>
   </div>
-</div>
 
-<div id="map"></div>
+  <div id="mobile-toggle-btn" class="mobile-toggle-btn hidden">
+    <span class="toggle-icon">🗺️</span>
+    <span class="toggle-text">View Map</span>
+  </div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- Configuration (must load before app.js) -->
-<script src="assets/config.js"></script>
-<!-- Main application -->
-<script src="assets/app.js"></script>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Configuration (must load before app.js) -->
+  <script src="assets/config.js"></script>
+  <!-- Main application -->
+  <script src="assets/app.js"></script>
 
 </body>
+
 </html>
