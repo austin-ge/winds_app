@@ -405,3 +405,158 @@ tbody tr.altitude-highlight {
     bottom: calc(24px + env(safe-area-inset-bottom));
   }
 }
+
+/* ================================
+   METAR CARD
+=================================== */
+
+/* Card accent — matches brand-accent (sky blue) */
+.card-metar .card-icon { background: rgba(14, 165, 233, 0.1); color: var(--brand-accent); }
+
+/* Two-station grid */
+.metar-stations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Individual station panel */
+.metar-station {
+  background: var(--panel-secondary);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.metar-station-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.metar-station-id {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.metar-station-name {
+  font-size: 0.68rem;
+  color: var(--ink-secondary);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+/* Field rows */
+.metar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.metar-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.metar-value {
+  font-size: 0.78rem;
+  color: var(--ink);
+  font-weight: 500;
+  text-align: right;
+  line-height: 1.3;
+}
+
+/* Raw METAR string */
+.metar-raw {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.62rem;
+  color: var(--ink-secondary);
+  word-break: break-all;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #e2e8f0;
+  line-height: 1.5;
+}
+
+/* Error / placeholder states */
+.metar-error,
+.metar-placeholder {
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.metar-error {
+  color: var(--bad);
+}
+
+/* ================================
+   FLIGHT CATEGORY BADGES
+=================================== */
+
+.flt-cat {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.flt-cat-vfr  { background: var(--good); }
+.flt-cat-mvfr { background: #3b82f6; }
+.flt-cat-ifr  { background: var(--bad); }
+.flt-cat-lifr { background: #a855f7; }
+
+/* ================================
+   SURFACE ROW IN WINDS TABLE
+=================================== */
+
+/* Thicker top border acting as a visual separator */
+tr.surface-separator td {
+  padding: 0;
+  height: 0;
+  border-top: 2px solid #e2e8f0;
+  border-bottom: none;
+}
+
+tr.surface-row td {
+  background: rgba(14, 165, 233, 0.06);
+  color: var(--ink-secondary);
+  font-style: italic;
+}
+
+/* "Sfc" label + station ID stacked in the altitude cell */
+.surface-alt-label {
+  font-weight: 600;
+  color: var(--ink);
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.surface-station {
+  font-size: 0.65rem;
+  color: var(--ink-secondary);
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
