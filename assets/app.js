@@ -30,6 +30,10 @@ let adsbLastFailureMessage = "";
 let jumpPlaneActive = false;
 let jumpPlaneLastTail = null;
 
+// METAR surface weather data
+let metarData = null;
+let metarTimestamp = null;
+
 /* ================================
    LOCAL STORAGE CACHING
 =================================== */
@@ -218,6 +222,44 @@ function updateStatusStrip() {
   }
 }
 
+// Returns the worst flight category across an array of METAR objects
+// Severity order: LIFR > IFR > MVFR > VFR
+function getWorstFltCat(metars) {
+  const order = ['LIFR', 'IFR', 'MVFR', 'VFR'];
+  let worst = 'VFR';
+  for (const m of metars) {
+    const cat = (m.fltCat || 'VFR').toUpperCase();
+    if (order.indexOf(cat) < order.indexOf(worst)) {
+      worst = cat;
+    }
+  }
+  return worst;
+}
+
+// Update the METAR status badge in the status strip
+// state: 'loading' | 'ok' | 'error'
+function updateMetarStatus(state) {
+  const el = document.getElementById('status-metar');
+  if (!el) return;
+
+  if (state === 'loading') {
+    setStatusBadge(el, 'status-neutral', 'METAR --');
+    return;
+  }
+
+  if (state === 'error') {
+    setStatusBadge(el, 'status-warning', 'METAR err');
+    return;
+  }
+
+  if (state === 'ok' && metarData && metarData.length > 0) {
+    const worstCat = getWorstFltCat(metarData);
+    const age = getAgeLabel(metarTimestamp);
+    const badgeClass = worstCat === 'VFR' ? 'status-good' : 'status-warning';
+    setStatusBadge(el, badgeClass, `${worstCat} ${age}`);
+  }
+}
+
 /* ================================
    RETRY LOGIC WITH EXPONENTIAL BACKOFF
 =================================== */
@@ -295,6 +337,42 @@ function getWindAtAlt(altFt) {
     }
   }
   return best;
+}
+
+/* ================================
+   METAR Helpers
+=================================== */
+
+// Format wind from a METAR object into a human-readable string
+function getMetarWindDisplay(metar) {
+  const speed = Math.round(metar.wspd || 0);
+  const gust = metar.wgst ? `G${Math.round(metar.wgst)}` : '';
+  if (metar.wdir == null) {
+    return `Variable @ ${speed}${gust} kt`;
+  }
+  const dir = String(Math.round(metar.wdir)).padStart(3, '0');
+  return `${dir}° @ ${speed}${gust} kt`;
+}
+
+// Derive a ceiling/sky description from a METAR object
+// Uses the clouds[] array; falls back to the top-level cover field
+function getMetarCeiling(metar) {
+  if (!metar.clouds || metar.clouds.length === 0) {
+    const cover = (metar.cover || '').toUpperCase();
+    if (cover === 'CLR' || cover === 'SKC' || cover === 'CAVOK') return 'Clear';
+    return cover || 'Clear';
+  }
+  // Find the lowest BKN or OVC layer — that's the ceiling
+  const significant = metar.clouds.filter(c =>
+    c.cover === 'BKN' || c.cover === 'OVC'
+  );
+  if (significant.length === 0) {
+    // Only FEW / SCT layers — report the lowest one, no true ceiling
+    const lowest = metar.clouds[0];
+    return `${lowest.cover} ${lowest.base.toLocaleString()}`;
+  }
+  const lowest = significant.reduce((a, b) => (a.base <= b.base ? a : b));
+  return `${lowest.cover} ${lowest.base.toLocaleString()}`;
 }
 
 /* ================================
@@ -443,6 +521,46 @@ function renderWindsTable() {
     tbody.appendChild(tr);
   });
 
+  // Surface row — sourced from METAR (most recent observation, or first if tied)
+  if (metarData && metarData.length > 0) {
+    const primary = metarData.reduce((a, b) =>
+      (b.obsTime || 0) > (a.obsTime || 0) ? b : a
+    );
+
+    // Visual separator before the surface row
+    const separatorRow = document.createElement('tr');
+    separatorRow.classList.add('surface-separator');
+    separatorRow.innerHTML = '<td colspan="3"></td>';
+    tbody.appendChild(separatorRow);
+
+    const tr = document.createElement('tr');
+    tr.classList.add('surface-row');
+
+    const windDir = primary.wdir != null ? Math.round(primary.wdir) : null;
+    const windSpeed = Math.round(primary.wspd || 0);
+    const windGust = primary.wgst ? `G${Math.round(primary.wgst)}` : '';
+    const arrow = windDir != null ? getWindArrow(windDir) : '~';
+    const dirDisplay = windDir != null ? String(windDir).padStart(3, '0') : 'VRB';
+    const speedClass = getWindSpeedClass(windSpeed);
+    const speedPercent = windSpeed === 0
+      ? 0
+      : Math.max(8, Math.round((windSpeed / speedScaleMax) * 100));
+    const speedScale = speedPercent / 100;
+
+    tr.innerHTML = `
+      <td>
+        <div class="surface-alt-label">Sfc</div>
+        <div class="surface-station">${primary.icaoId}</div>
+      </td>
+      <td><span class="wind-dir"><span class="wind-arrow">${arrow}</span>${dirDisplay}</span></td>
+      <td class="wind-speed-cell ${speedClass}">
+        <span class="wind-speed-value">${windSpeed}${windGust}</span>
+        <span class="wind-speed-bar" style="transform: scaleX(${speedScale});"></span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+
   updateWindsTimestampDisplay();
 }
 
@@ -467,6 +585,67 @@ function updateWindsTimestampDisplay() {
   }
 
   updateStatusStrip();
+}
+
+/* ================================
+   Render METAR Card
+=================================== */
+
+function renderMetar(metars) {
+  const contentEl = document.getElementById('metar-content');
+  const updatedEl = document.getElementById('metar-updated');
+  if (!contentEl) return;
+
+  const fltCatClass = cat => `flt-cat flt-cat-${(cat || 'vfr').toLowerCase()}`;
+
+  let html = '<div class="metar-stations">';
+
+  for (const metar of metars) {
+    const fltCat = (metar.fltCat || 'VFR').toUpperCase();
+    const windDisplay = getMetarWindDisplay(metar);
+    const visDisplay = `${metar.visib} SM`;
+    const ceilDisplay = getMetarCeiling(metar);
+    const tempC = metar.temp != null ? Math.round(metar.temp) : '--';
+    const dewpC = metar.dewp != null ? Math.round(metar.dewp) : '--';
+    const stationName = metar.name
+      ? metar.name.split(',')[0]   // e.g. "Kenosha Rgnl" from "Kenosha Rgnl, WI, US"
+      : metar.icaoId;
+
+    html += `
+      <div class="metar-station">
+        <div class="metar-station-header">
+          <span class="metar-station-id">${metar.icaoId}</span>
+          <span class="${fltCatClass(fltCat)}">${fltCat}</span>
+        </div>
+        <div class="metar-station-name">${stationName}</div>
+        <div class="metar-row">
+          <span class="metar-label">Wind</span>
+          <span class="metar-value">${windDisplay}</span>
+        </div>
+        <div class="metar-row">
+          <span class="metar-label">Vis</span>
+          <span class="metar-value">${visDisplay}</span>
+        </div>
+        <div class="metar-row">
+          <span class="metar-label">Sky</span>
+          <span class="metar-value">${ceilDisplay}</span>
+        </div>
+        <div class="metar-row">
+          <span class="metar-label">T / Td</span>
+          <span class="metar-value">${tempC}° / ${dewpC}°C</span>
+        </div>
+        <div class="metar-raw">${metar.rawOb}</div>
+      </div>
+    `;
+  }
+
+  html += '</div>';
+  contentEl.innerHTML = html;
+
+  if (updatedEl && metarTimestamp) {
+    const age = getWindsAgeString(metarTimestamp);
+    updatedEl.textContent = `Updated${age}`;
+  }
 }
 
 /* ================================
@@ -821,6 +1000,54 @@ async function fetchWinds() {
     }
   } finally {
     setLoadingState('winds-loading', false);
+  }
+}
+
+/* ================================
+   Fetch METAR surface weather
+=================================== */
+
+async function fetchMetar() {
+  setLoadingState('metar-loading', true);
+  updateMetarStatus('loading');
+
+  try {
+    const ids = METAR_STATION_IDS.join(',');
+    const url = `https://aviationweather.gov/api/data/metar?ids=${ids}&format=json`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error('No METAR data returned');
+    }
+
+    metarData = data;
+    metarTimestamp = Date.now();
+
+    renderMetar(metarData);
+
+    // Re-render winds table so the surface row reflects fresh METAR data
+    renderWindsTable();
+
+    updateMetarStatus('ok');
+
+    console.log('METAR fetched:', metarData.map(m => m.icaoId).join(', '));
+
+  } catch (err) {
+    console.error('Error fetching METAR:', err);
+    updateMetarStatus('error');
+
+    const contentEl = document.getElementById('metar-content');
+    if (contentEl) {
+      contentEl.innerHTML = '<div class="metar-error">Unable to load surface weather. Check console for details.</div>';
+    }
+  } finally {
+    setLoadingState('metar-loading', false);
   }
 }
 
@@ -1334,6 +1561,10 @@ initializeFromCache();
 fetchWinds();
 // Refresh winds every hour
 setInterval(fetchWinds, 60 * 60 * 1000);
+
+// Load METAR on page load and refresh every 30 minutes
+fetchMetar();
+setInterval(fetchMetar, METAR_REFRESH_MS);
 
 // Update winds timestamp display every minute
 setInterval(updateWindsTimestampDisplay, 60 * 1000);

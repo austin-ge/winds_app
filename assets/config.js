@@ -27,6 +27,11 @@ const approxAltitudeFtByLevel = {
   600: 13780
 };
 
+// METAR Configuration
+// Fetch the two nearest airports to the DZ; display both, use most recent for surface row
+const METAR_STATION_IDS = ["KENW", "KRAC"];
+const METAR_REFRESH_MS = 30 * 60 * 1000; // 30 minutes
+
 // ADS-B Configuration
 // Primary: local dump1090 (via Tailscale)
 // Fallback: adsb.lol API

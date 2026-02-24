@@ -42,6 +42,10 @@
         <span id="status-adsb" class="status-badge status-neutral">--</span>
       </div>
       <div class="status-item">
+        <span class="status-label">METAR</span>
+        <span id="status-metar" class="status-badge status-neutral">--</span>
+      </div>
+      <div class="status-item">
         <span class="status-label">Jump</span>
         <span id="status-jump" class="status-badge status-neutral">--</span>
       </div>
@@ -103,6 +107,21 @@
             <tbody id="winds-table-body"></tbody>
           </table>
           <div id="winds-updated" class="timestamp">--</div>
+        </div>
+      </div>
+
+      <!-- METAR Card -->
+      <div class="card card-metar">
+        <div class="card-header">
+          <span class="card-icon">🌡️</span>
+          <h2 class="card-title">Surface Weather</h2>
+          <span id="metar-loading" class="loading-spinner hidden"></span>
+        </div>
+        <div class="card-body">
+          <div id="metar-content">
+            <div class="metar-placeholder">Loading surface weather...</div>
+          </div>
+          <div id="metar-updated" class="timestamp">--</div>
         </div>
       </div>
 
